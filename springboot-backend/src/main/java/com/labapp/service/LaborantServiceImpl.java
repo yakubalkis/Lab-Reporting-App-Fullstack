@@ -48,4 +48,9 @@ public class LaborantServiceImpl implements LaborantService{
     public void deleteById(Integer id) {
         laborantRepository.deleteById(id);
     }
+
+    @Override
+    public Laborant findLaborantByHospitalIdNo(String hospitalIdNo) {
+        return laborantRepository.findLaborantByHospitalIdNo(hospitalIdNo);
+    }
 }

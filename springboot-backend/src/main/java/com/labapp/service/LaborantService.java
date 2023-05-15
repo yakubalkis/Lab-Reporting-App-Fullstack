@@ -14,4 +14,6 @@ public interface LaborantService {
 
     void deleteById(Integer id);
 
+    Laborant findLaborantByHospitalIdNo(String hospitalIdNo);
+
 }
