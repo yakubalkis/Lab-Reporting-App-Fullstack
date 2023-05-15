@@ -10,7 +10,7 @@ public interface ReportService {
 
     Report findById(Integer id);
 
-    void save(Report report);
+    Report save(Report report);
 
     void deleteById(Integer id);
 
