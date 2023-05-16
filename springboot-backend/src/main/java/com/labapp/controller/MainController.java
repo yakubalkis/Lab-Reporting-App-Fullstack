@@ -47,9 +47,18 @@ public class MainController {
 
         Laborant currentLaborant = laborantService.findLaborantByHospitalIdNo(laborantHospitalIdNo);
         currentLaborant.addReport(report);
+        report.setId(0); //  this is to force a save of new item ... instead of update
 
         return reportService.save(report);
     }
+
+    @PutMapping("/reports")
+    public Report updateReport(@RequestBody Report updatedReport)
+    {
+        return reportService.save(updatedReport);
+    }
+
+    
 
 
 
