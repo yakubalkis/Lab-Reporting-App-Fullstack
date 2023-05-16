@@ -1,7 +1,7 @@
 import { useState } from "react"
 import axios from "axios";
 import { useNavigate } from "react-router";
-const EMPLOYEE_API_BASE_URL = "http://localhost:8080/api/v1/laborant";
+const LAB_API_BASE_URL = "http://localhost:8080/api/v1/laborant";
 
 export default function Registration(){
 
@@ -40,13 +40,13 @@ export default function Registration(){
         else{setLabelWarning(() => "");}
 
         let laborant = {firstName: inputAll.firstName, lastName: inputAll.lastName, hospitalIdNo: inputAll.hospitalIdNo}; 
-        axios.post(EMPLOYEE_API_BASE_URL, laborant);
+        axios.post(LAB_API_BASE_URL, laborant);
 
-        navigate(`/${inputAll.hospitalIdNo}/reports`);
+        navigate(`/laborant/${inputAll.hospitalIdNo}/reports`);
     }
 
     return(
-        <div className="container">
+        <div>
             <div className="row">
                 <div className="col-md-6 col-md-offset-3">
 
@@ -69,9 +69,9 @@ export default function Registration(){
                             <div className="form-group">
                                 <label>Hospital Id No: </label>
                                 <input className="form-control" placeholder="Id No" type="text" name="hospitalIdNo" value={inputAll.hospitalIdNo}  onChange={handleChange} maxLength={7}/>
-                            </div>
+                            </div><br></br>
                             
-                            <br></br>
+                            
                             <button type="submit" className="btn btn-success" onClick={saveLaborant}>Save</button>
                             <label  style={{marginLeft: "1rem", color: "red"}}>{labelWarning}</label>
 
