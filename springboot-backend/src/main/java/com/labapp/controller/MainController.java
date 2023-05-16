@@ -49,8 +49,8 @@ public class MainController {
     public Report createReport(@PathVariable String laborantHospitalIdNo, @RequestBody Report report){
 
         Laborant currentLaborant = laborantService.findLaborantByHospitalIdNo(laborantHospitalIdNo);
+
         currentLaborant.addReport(report);
-        report.setId(0); //  this is to force a save of new item ... instead of update
 
         return reportService.save(report);
     }
