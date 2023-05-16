@@ -7,9 +7,12 @@ import com.labapp.repository.ReportRepository;
 import com.labapp.service.LaborantService;
 import com.labapp.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -58,7 +61,15 @@ public class MainController {
         return reportService.save(updatedReport);
     }
 
-    
+    @DeleteMapping("/reports/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteReport(@PathVariable Integer id){
+
+        reportService.deleteById(id);
+        Map<String, Boolean> response = new HashMap<>();
+
+        response.put("deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
 
 
 
