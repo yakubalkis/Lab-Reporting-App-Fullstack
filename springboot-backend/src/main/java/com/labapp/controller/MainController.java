@@ -71,6 +71,11 @@ public class MainController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/laborant")
+    public Laborant createLaborant(@RequestBody Laborant laborant){
+        return laborantService.save(laborant);
+    }
+
 
 
 }
