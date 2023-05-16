@@ -1,13 +1,19 @@
 import { useState } from "react"
-
+import axios from "axios";
+import { useNavigate } from "react-router";
+const EMPLOYEE_API_BASE_URL = "http://localhost:8080/api/v1/laborant";
 
 export default function Registration(){
+
+    const navigate = useNavigate();
 
     const [inputAll, setInputAll] = useState({
         firstName: "",
         lastName: "",
         hospitalIdNo: ""
-    })
+    });
+
+    const [labelWarning, setLabelWarning] = useState("");
 
     function handleChange(event){
         const {name, value} = event.target;
@@ -22,7 +28,21 @@ export default function Registration(){
 
     function saveLaborant(e){
         e.preventDefault();
+        
+        if(inputAll.firstName === "" || inputAll.lastName === "" || inputAll.hospitalIdNo === ""){
+            setLabelWarning(() => "Please fill in the all text boxes!");
+            return;
+        }
+        else if(inputAll.hospitalIdNo.length !== 7){
+            setLabelWarning(() => "Please enter 7 digit ID number!");
+            return;
+        }
+        else{setLabelWarning(() => "");}
 
+        let laborant = {firstName: inputAll.firstName, lastName: inputAll.lastName, hospitalIdNo: inputAll.hospitalIdNo}; 
+        axios.post(EMPLOYEE_API_BASE_URL, laborant);
+
+        navigate(`/${inputAll.hospitalIdNo}/reports`);
     }
 
     return(
@@ -48,11 +68,12 @@ export default function Registration(){
 
                             <div className="form-group">
                                 <label>Hospital Id No: </label>
-                                <input className="form-control" placeholder="Id No" type="text" name="hospitalIdNo" value={inputAll.hospitalIdNo}  onChange={handleChange}/>
+                                <input className="form-control" placeholder="Id No" type="text" name="hospitalIdNo" value={inputAll.hospitalIdNo}  onChange={handleChange} maxLength={7}/>
                             </div>
                             
                             <br></br>
                             <button type="submit" className="btn btn-success" onClick={saveLaborant}>Save</button>
+                            <label  style={{marginLeft: "1rem", color: "red"}}>{labelWarning}</label>
 
                         </form>
                     </div>
