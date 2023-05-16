@@ -41,7 +41,7 @@ export default function AddReport(){
         }
 
         if(reportId=== String(0)){ // create report
-            
+
             let report = {firstName: inputAll.firstName, lastName: inputAll.lastName,
                           tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName};
 
@@ -54,6 +54,8 @@ export default function AddReport(){
         
         navigate(`/laborant/${laborantHospitalIdNo}/reports`);
     }
+    
+    const header = reportId === String(0) ? "Add Report": "Update Report"
 
     return(
             <div>
@@ -62,7 +64,7 @@ export default function AddReport(){
                     <div className="row">
                         <div className="card col-md-6 offset-md-3 offset-md-3">
 
-                            <h3 className="text-center">Add Report</h3>
+                            <h3 className="text-center">{header}</h3>
                             <div className="card-body">
                                 <form>
 
