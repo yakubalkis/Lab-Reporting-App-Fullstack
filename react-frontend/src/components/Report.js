@@ -1,8 +1,21 @@
 
+import axios from "axios";
+import {useParams,useNavigate} from "react-router-dom";
+const LAB_API_BASE_URL = "http://localhost:8080/api/v1/reports";
 
 export default function(props){
 
-    console.log(props.reports);
+    const navigate = useNavigate();
+    const {laborantHospitalIdNo} = useParams();
+
+    function editReport(id){
+        navigate(`/laborant/${laborantHospitalIdNo}/${id}`);
+    } 
+
+    function deleteReport(id){
+        axios.delete(LAB_API_BASE_URL + "/" + id);
+        window.location.reload();
+    }
 
     return(
         <div className="row">
@@ -17,6 +30,7 @@ export default function(props){
                     <th>Diagnosis Detail</th>
                     <th>Date</th>
                     <th>Report Image</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
 
@@ -31,7 +45,10 @@ export default function(props){
                             <td>{report.diagnosisDetail}</td>
                             <td>{report.date}</td>
                             <td>{report.imageName}</td>
-                            
+                            <td>
+                                <button onClick={() => editReport(report.id)} className="btn btn-info">Update</button>
+                                <button onClick={() => deleteReport(report.id)} className="btn btn-danger" style={{marginLeft: "10px"}}>Delete</button>
+                            </td>
                         </tr> 
                     )
                 }
