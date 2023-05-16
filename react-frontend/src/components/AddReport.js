@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 const LAB_API_BASE_URL =  "http://localhost:8080/api/v1/reports";
@@ -15,10 +15,28 @@ export default function AddReport(){
         date: "",
         imageName: ""
     });
+    
     const [labelWarning, setLabelWarning] = useState("");
     const {laborantHospitalIdNo, reportId} = useParams();
     const navigate = useNavigate();
-    
+
+
+    useEffect(() => {
+        if(reportId !== String(0)){
+            axios.get(LAB_API_BASE_URL + "/" + reportId)
+                .then((res) => {
+                    setInputAll({
+                        firstName: res.data.firstName,
+                        lastName: res.data.lastName,
+                        tcNo: res.data.tcNo,
+                        diagnosisTitle: res.data.diagnosisTitle,
+                        diagnosisDetail: res.data.diagnosisDetail,
+                        date: res.data.date,
+                        imageName:res.data.imageName
+                    })
+                })
+        }
+    }, []);
 
 
     function handleChange(event){
@@ -47,9 +65,11 @@ export default function AddReport(){
 
             axios.post(LAB_API_BASE_URL+ "/" + laborantHospitalIdNo, report);
         }
-        else{ // uptate report
+        else{ // update report
             let report = {id: reportId, firstName: inputAll.firstName, lastName: inputAll.lastName,
                           tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName};
+
+            axios.put(LAB_API_BASE_URL, report);
         }
         
         navigate(`/laborant/${laborantHospitalIdNo}/reports`);
