@@ -17,6 +17,10 @@ export default function(props){
         window.location.reload();
     }
 
+    function seeImage(id){
+        
+    }
+
     return(
         <div className="row">
         <table className="table table-striped table-bordered">
@@ -44,7 +48,9 @@ export default function(props){
                             <td>{report.diagnosisTitle}</td>
                             <td>{report.diagnosisDetail}</td>
                             <td>{report.date}</td>
-                            <td>{report.imageName}</td>
+                            <td>
+                                <button onClick={() => seeImage(report.id)} className="btn btn-info btn-dark">Click to See</button>
+                            </td>
                             <td>
                                 <button onClick={() => editReport(report.id)} className="btn btn-info">Update</button>
                                 <button onClick={() => deleteReport(report.id)} className="btn btn-danger" style={{marginLeft: "10px"}}>Delete</button>
