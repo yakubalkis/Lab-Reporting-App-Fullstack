@@ -152,7 +152,7 @@ export default function AddReport(){
 
                                     <div className="form-group">
                                         <label>{fileProcess}</label>
-                                        <input placeholder="Image" type="file" name="imageName" className="form-control" onChange={onFileChangeHandler}  />
+                                        <input placeholder="Image" type="file" accept="image/png, image/jpeg" name="imageName" className="form-control" onChange={onFileChangeHandler}  />
                                     </div><br></br>
                                     
                                     <button type="submit" className="btn btn-success" onClick={SaveOrUpdateEmployee}>Save</button>
