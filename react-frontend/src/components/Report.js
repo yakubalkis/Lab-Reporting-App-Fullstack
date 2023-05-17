@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import {useParams,useNavigate} from "react-router-dom";
 import {Buffer} from 'buffer';
+import Button from 'react-bootstrap/Button';
 import ReportImage from "./ReportImage";
 const LAB_API_BASE_URL = "http://localhost:8080/api/v1/reports";
 const LAB_API_FILE_BASE_URL = "http://localhost:8080/api/v1/file";
@@ -10,6 +11,7 @@ const LAB_API_FILE_BASE_URL = "http://localhost:8080/api/v1/file";
 export default function(props){
     
     const [imgData, setImageData] = useState(null);
+    const [show, setShow] = useState(false);
     const navigate = useNavigate();
     const {laborantHospitalIdNo} = useParams();
 
@@ -29,10 +31,12 @@ export default function(props){
             .then((res) => {
                 setImageData(() => Buffer.from(res.data, 'binary').toString('base64'))
             })
-
+        setShow(true); // for modal component
     }
+    
+    const handleClose = () => setShow(false);
 
-    const ImageComponent = imgData !== null ?  <ReportImage imgData={imgData} /> : <></>
+    const ImageComponent = imgData !== null ?  <ReportImage show={show} onClose={handleClose}  imgData={imgData} /> : <></>
    
     return(
         <div className="row">
@@ -62,7 +66,7 @@ export default function(props){
                             <td>{report.diagnosisDetail}</td>
                             <td>{report.date}</td>
                             <td>
-                                <button onClick={() => seeImage(report.id, report.imageName)} className="btn btn-info btn-dark">Click to See</button>
+                                <Button onClick={() => seeImage(report.id, report.imageName)} className="btn btn-dark">Click to See</Button>
                             </td>
                             <td>
                                 <button onClick={() => editReport(report.id)} className="btn btn-info">Update</button>
