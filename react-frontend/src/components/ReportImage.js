@@ -1,11 +1,16 @@
-
+import { Modal } from 'react-bootstrap';
 
 export default function ReportImage(props){
 
+    const { show, onClose } = props;
+
+
+
     return(
-        <div className="image-cart-div">
-            
-            <img src={`data:image/png;base64,`+ props.imgData} />
+        <div style={{width: "40rem"}}>
+            <Modal show={show} onHide={onClose} centered>
+                <img src={`data:image/png;base64,`+ props.imgData} />
+            </Modal>
         </div>
     )
     
