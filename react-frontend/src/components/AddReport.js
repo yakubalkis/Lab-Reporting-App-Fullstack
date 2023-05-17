@@ -39,8 +39,8 @@ export default function AddReport(){
     }, []);
 
 
-    function handleChange(event){
-        const {name, value} = event.target;
+    function handleChange(e){
+        const {name, value} = e.target;
 
         setInputAll(prevState => {
             return{
@@ -50,10 +50,24 @@ export default function AddReport(){
         })
     }
 
+    function onFileChangeHandler(e){
+        
+        setInputAll((prevState) => {
+            return{
+                ...prevState,
+                imageName: e.target.files[0].name
+            }
+        })
+
+        const formData = new FormData();
+        formData.append('file', e.target.files[0]);
+        
+    }
+
     function SaveOrUpdateEmployee(e){
         e.preventDefault();
 
-        if(inputAll.firstName==="" || inputAll.lastName === "" || inputAll.tcNo === "" || inputAll.diagnosisTitle === "" || inputAll.diagnosisDetail === ""){
+        if(inputAll.firstName==="" || inputAll.lastName === "" || inputAll.tcNo === "" || inputAll.diagnosisTitle === "" || inputAll.diagnosisDetail === "" || inputAll.date === "" || inputAll.imageName === ""){
             setLabelWarning(() => "Please fill in the all text boxes!");
             return;
         }
@@ -119,8 +133,8 @@ export default function AddReport(){
                                     </div><br></br>
 
                                     <div className="form-group">
-                                        <label>Image </label>
-                                        <input placeholder="Image" type="text" name="imageName" value={inputAll.imageName} className="form-control" onChange={handleChange}  />
+                                        <label>Upload Image </label>
+                                        <input placeholder="Image" type="file" name="imageName" className="form-control" onChange={onFileChangeHandler}  />
                                     </div><br></br>
                                     
                                     <button type="submit" className="btn btn-success" onClick={SaveOrUpdateEmployee}>Save</button>
