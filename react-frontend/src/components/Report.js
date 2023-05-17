@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import {useParams,useNavigate} from "react-router-dom";
 import {Buffer} from 'buffer';
+import ReportImage from "./ReportImage";
 const LAB_API_BASE_URL = "http://localhost:8080/api/v1/reports";
 const LAB_API_FILE_BASE_URL = "http://localhost:8080/api/v1/file";
 
@@ -23,17 +24,18 @@ export default function(props){
 
     function seeImage(id, imageName){
 
-        axios.get(LAB_API_FILE_BASE_URL +"/" +imageName, {
+        axios.get(LAB_API_FILE_BASE_URL +"/" + imageName, {
             responseType: 'arraybuffer'})
             .then((res) => {
                 setImageData(() => Buffer.from(res.data, 'binary').toString('base64'))
             })
+
     }
-    console.log(imgData)
-   // console.log(URL.createObjectURL(imgData))
+
+    const ImageComponent = imgData !== null ?  <ReportImage imgData={imgData} /> : <></>
+   
     return(
         <div className="row">
-        <img src={`data:image/png;base64,`+imgData} />
         <table className="table table-striped table-bordered">
             
             <thead>
@@ -70,9 +72,9 @@ export default function(props){
                     )
                 }
             </tbody>
-
         </table>
 
+        {ImageComponent}
     </div>
     )
 
