@@ -85,25 +85,28 @@ public class MainController {
     }
 
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity uploadFile(@RequestParam MultipartFile img) {
+    public ResponseEntity uploadFile(@RequestParam MultipartFile img) throws IOException {
 
-        try {
+
             File saveFile = new ClassPathResource("static/img").getFile();
             Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + img.getOriginalFilename());
-            System.out.println(path);
+
             Files.copy(img.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
 
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity updateFile(@RequestParam MultipartFile img, @RequestParam String oldImageName){
+    public ResponseEntity updateFile(@RequestParam MultipartFile img, @RequestParam String oldImageName) throws IOException {
 
+        // first, delete old image
+        File saveFile = new ClassPathResource("static/img").getFile();
+        Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + oldImageName);
+        Files.delete(path);
 
+        // save new image
+        Path path2 = Paths.get(saveFile.getAbsolutePath() + File.separator + img.getOriginalFilename());
+        Files.copy(img.getInputStream(), path2, StandardCopyOption.REPLACE_EXISTING);
 
         return ResponseEntity.ok().build();
     }
@@ -113,9 +116,8 @@ public class MainController {
 
         File saveFile = new ClassPathResource("static/img").getFile();
         Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + imgName);
-        System.out.println(path);
 
-        //return IOUtils.toByteArray(getClass().getResourceAsStream(String.valueOf(path)));
+
         InputStream in = Files.newInputStream(path, StandardOpenOption.READ);
         return in.readAllBytes();
     }
