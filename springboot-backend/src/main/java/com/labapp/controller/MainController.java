@@ -4,6 +4,7 @@ import com.labapp.entity.Laborant;
 import com.labapp.entity.Report;
 import com.labapp.service.LaborantService;
 import com.labapp.service.ReportService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
@@ -12,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,6 +99,27 @@ public class MainController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity updateFile(@RequestParam MultipartFile img, @RequestParam String oldImageName){
+
+
+
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/file/{imgName}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public @ResponseBody byte[] getImage(@PathVariable String imgName) throws IOException {
+
+        File saveFile = new ClassPathResource("static/img").getFile();
+        Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + imgName);
+        System.out.println(path);
+
+        //return IOUtils.toByteArray(getClass().getResourceAsStream(String.valueOf(path)));
+        InputStream in = Files.newInputStream(path, StandardOpenOption.READ);
+        return in.readAllBytes();
+    }
+
 
 
 }
