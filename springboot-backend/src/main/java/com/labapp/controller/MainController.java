@@ -2,14 +2,20 @@ package com.labapp.controller;
 
 import com.labapp.entity.Laborant;
 import com.labapp.entity.Report;
-import com.labapp.repository.LaborantRepository;
-import com.labapp.repository.ReportRepository;
 import com.labapp.service.LaborantService;
 import com.labapp.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +27,8 @@ public class MainController {
 
     private LaborantService laborantService;
     private ReportService reportService;
+
+
 
     @Autowired
     public MainController(LaborantService laborantService, ReportService reportService) {
@@ -76,6 +84,21 @@ public class MainController {
         return laborantService.save(laborant);
     }
 
+    @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity uploadFile(@RequestParam MultipartFile img) {
+
+        try {
+            File saveFile = new ClassPathResource("static/img").getFile();
+            Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + img.getOriginalFilename());
+            System.out.println(path);
+            Files.copy(img.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok().build();
+    }
 
 
 }
