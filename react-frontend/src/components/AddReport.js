@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 const LAB_API_BASE_URL =  "http://localhost:8080/api/v1/reports";
+const LAB_API_FILE_BASE_URL = "http://localhost:8080/api/v1/file";
 
 export default function AddReport(){
 
@@ -15,7 +16,8 @@ export default function AddReport(){
         date: "",
         imageName: ""
     });
-    
+    const [oldImageName,setOldImageName] = useState();
+    const [imageFile, setImageFile] = useState({});    
     const [labelWarning, setLabelWarning] = useState("");
     const {laborantHospitalIdNo, reportId} = useParams();
     const navigate = useNavigate();
@@ -25,6 +27,9 @@ export default function AddReport(){
         if(reportId !== String(0)){
             axios.get(LAB_API_BASE_URL + "/" + reportId)
                 .then((res) => {
+
+                    setOldImageName(res.data.imageName)
+
                     setInputAll({
                         firstName: res.data.firstName,
                         lastName: res.data.lastName,
@@ -36,9 +41,11 @@ export default function AddReport(){
                     })
                 })
         }
+        
     }, []);
 
-
+    
+    
     function handleChange(e){
         const {name, value} = e.target;
 
@@ -57,18 +64,16 @@ export default function AddReport(){
                 ...prevState,
                 imageName: e.target.files[0].name
             }
-        })
+        });
 
-        const formData = new FormData();
-        formData.append('file', e.target.files[0]);
-        
+        setImageFile(() => e.target.files[0]);
     }
 
     function SaveOrUpdateEmployee(e){
         e.preventDefault();
 
         if(inputAll.firstName==="" || inputAll.lastName === "" || inputAll.tcNo === "" || inputAll.diagnosisTitle === "" || inputAll.diagnosisDetail === "" || inputAll.date === "" || inputAll.imageName === ""){
-            setLabelWarning(() => "Please fill in the all text boxes!");
+            setLabelWarning(() => "Please fill in the all fields!");
             return;
         }
 
@@ -78,18 +83,31 @@ export default function AddReport(){
                           tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName};
 
             axios.post(LAB_API_BASE_URL+ "/" + laborantHospitalIdNo, report);
+            
+            const formData = new FormData();
+            formData.append('img', imageFile);
+
+            axios.post(LAB_API_FILE_BASE_URL, formData);
         }
         else{ // update report
             let report = {id: reportId, firstName: inputAll.firstName, lastName: inputAll.lastName,
                           tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName};
-
+            
             axios.put(LAB_API_BASE_URL, report);
+            
+            const formData = new FormData();
+            formData.append('img', imageFile);
+            formData.append('oldImageName', oldImageName); // to update, old image should be deleted
+           
+            axios.put(LAB_API_FILE_BASE_URL, formData);
         }
         
         navigate(`/laborant/${laborantHospitalIdNo}/reports`);
+        window.location.reload();
     }
     
-    const header = reportId === String(0) ? "Add Report": "Update Report"
+    const header = reportId === String(0) ? "Add Report": "Update Report";
+    const fileProcess = reportId === String(0) ? "Upload File" : "Change File";
 
     return(
             <div>
@@ -133,7 +151,7 @@ export default function AddReport(){
                                     </div><br></br>
 
                                     <div className="form-group">
-                                        <label>Upload Image </label>
+                                        <label>{fileProcess}</label>
                                         <input placeholder="Image" type="file" name="imageName" className="form-control" onChange={onFileChangeHandler}  />
                                     </div><br></br>
                                     
