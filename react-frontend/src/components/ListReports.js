@@ -22,6 +22,7 @@ export default function ListReports(){
             .then((res) => {
                 setReportList(Object.assign([], res.data)) // make deep copy to have different memory address for not being effected by change
                                                             // from filteredReportList
+                                                            
                 setFilteredReportList(res.data) // at first, since there is no filter, filteredReportList has all data too
             })
     },[]);
@@ -86,7 +87,6 @@ export default function ListReports(){
                 <DropdownButton id="dropdown-basic-button" title={filterType} className="dropdown-filter">
                     <Dropdown.Item onClick={() => handleChange("By Patient Name/Surname")}>By Patient Name/Surname</Dropdown.Item>
                     <Dropdown.Item onClick={() => handleChange("By TC No")}>By TC No</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleChange("By Lab. Name/Surname")}>By Lab. Name/Surname</Dropdown.Item>
                     <Dropdown.Item onClick={() => handleChange("Choose Filter type")}>Set No Filter</Dropdown.Item>
                 </DropdownButton>
 
