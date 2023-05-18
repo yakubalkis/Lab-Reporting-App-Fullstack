@@ -28,6 +28,9 @@ public class Report {
     @Column(name = "image_name")
     private String imageName;
 
+    @Column(name = "created_by")
+    private String createdBy;
+
     public Report() {
     }
 
@@ -103,6 +106,14 @@ public class Report {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Override
