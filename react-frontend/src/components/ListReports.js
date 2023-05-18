@@ -11,28 +11,31 @@ export default function ListReports(){
     const [reportList, setReportList] = useState([]);
     const [filteredReportList, setFilteredReportList] = useState([]);
     const [filterType, setFilterType] = useState("Choose Filter type");
+    const [isSorted,setIsSorted] = useState(false)
     const {laborantHospitalIdNo} = useParams();
+
     
     
 
     useEffect(() => {
         axios.get(LAB_API_BASE_URL+"/reports")
             .then((res) => {
-                setReportList(res.data)
+                setReportList(Object.assign([], res.data)) // make deep copy to have different memory address for not being effected by change
+                                                            // from filteredReportList
                 setFilteredReportList(res.data) // at first, since there is no filter, filteredReportList has all data too
             })
     },[]);
-
+    
     function handleChange(type){
         setFilterType(type)
     }
-
+    
     function handleSearchInput(e){
         
         const inputSearch = e.target.value;
        
         if(filterType==="By Patient Name/Surname"){
-            
+
             setFilteredReportList(reportList.filter((report) => report.firstName.toLowerCase().includes(inputSearch.toLowerCase())))
                 if(filteredReportList.length===0){ // if not found by name, try by surname
                     setFilteredReportList(reportList.filter((report) => report.lastName.toLowerCase().includes(inputSearch.toLowerCase())))
@@ -46,6 +49,26 @@ export default function ListReports(){
         }
     }
     
+    function handleSortBtn(boolIsSorted){
+        if(boolIsSorted){
+            setFilteredReportList((prevState) => prevState.sort(function(a,b){
+                return new Date(a.date) - new Date(b.date)
+            })) 
+        }
+        else{
+            setFilteredReportList((prevState) => prevState.sort(function(a,b){
+                return new Date(b.date) - new Date(a.date)
+            })) 
+        }
+        setIsSorted((prevState) => !prevState);
+    }
+
+    function handleDisableSortBtn(){
+        
+        setFilteredReportList((prevState) => reportList);
+        setIsSorted(false);
+       
+    }
     
     const HeadContent = reportList.length > 0 ? <></> : <h4 style={{marginLeft: "-10px", marginTop: "5px"}}>There are no report. You should add a report.</h4> ; 
     const ReportsTable = filteredReportList.length > 0 ? <Report reports={filteredReportList}  /> : <></> ;
@@ -67,6 +90,9 @@ export default function ListReports(){
                     <Dropdown.Item onClick={() => handleChange("Choose Filter type")}>Set No Filter</Dropdown.Item>
                 </DropdownButton>
 
+                
+                <button style={{marginLeft:"1.5rem",marginTop: "0.5rem"}} onClick={() => handleSortBtn(!isSorted)}  className="btn btn-success">Sort By Date {isSorted ? <>&darr;</> : <>&uarr;</>}</button>
+                <button style={{marginLeft:"1.5rem",marginTop: "0.5rem"}} onClick={() => handleDisableSortBtn()}  className="btn btn-secondary">Disable Sorting<>&#x21A9;</></button>
             </div>
 
             {ReportsTable}
