@@ -50,6 +50,7 @@ export default function(props){
                     <th>Diagnosis Title</th>
                     <th>Diagnosis Detail</th>
                     <th>Date</th>
+                    <th>Created By</th>
                     <th>Report Image</th>
                     <th>Actions</th>
                 </tr>
@@ -63,8 +64,9 @@ export default function(props){
                             <td>{report.lastName}</td>
                             <td>{report.tcNo}</td>
                             <td>{report.diagnosisTitle}</td>
-                            <td>{report.diagnosisDetail}</td>
+                            <td style={{maxWidth:"100px"}}>{report.diagnosisDetail}</td>
                             <td>{report.date}</td>
+                            <td>{report.createdBy}</td>
                             <td>
                                 <Button onClick={() => seeImage(report.id, report.imageName)} className="btn btn-dark">Click to See</Button>
                             </td>
