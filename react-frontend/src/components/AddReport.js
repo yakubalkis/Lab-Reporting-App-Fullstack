@@ -146,8 +146,8 @@ export default function AddReport(){
                                     </div><br></br>
 
                                     <div className="form-group">
-                                        <label>Date </label>
-                                        <input placeholder="Date" type="text" name="date" value={inputAll.date} className="form-control" onChange={handleChange}  />
+                                        <label>Date</label>
+                                        <input placeholder="Date" type="date" name="date" value={inputAll.date} className="form-control" onChange={handleChange}  />
                                     </div><br></br>
 
                                     <div className="form-group">
