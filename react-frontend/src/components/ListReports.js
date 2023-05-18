@@ -22,7 +22,7 @@ export default function ListReports(){
             .then((res) => {
                 setReportList(Object.assign([], res.data)) // make deep copy to have different memory address for not being effected by change
                                                             // from filteredReportList
-                                                            
+
                 setFilteredReportList(res.data) // at first, since there is no filter, filteredReportList has all data too
             })
     },[]);
@@ -30,7 +30,7 @@ export default function ListReports(){
     function handleChange(type){
         setFilterType(type)
     }
-    
+    console.log(reportList)
     function handleSearchInput(e){
         
         const inputSearch = e.target.value;
@@ -38,12 +38,15 @@ export default function ListReports(){
         if(filterType==="By Patient Name/Surname"){
 
             setFilteredReportList(reportList.filter((report) => report.firstName.toLowerCase().includes(inputSearch.toLowerCase())))
-                if(filteredReportList.length===0){ // if not found by name, try by surname
+                if(filteredReportList.length===0){ // if not found by name, try by lastname
                     setFilteredReportList(reportList.filter((report) => report.lastName.toLowerCase().includes(inputSearch.toLowerCase())))
                 }
         }
         else if(filterType==="By TC No"){
             setFilteredReportList(reportList.filter((report) => report.tcNo.includes(inputSearch)))
+        }
+        else if(filterType==="By Report Creator"){
+            setFilteredReportList(reportList.filter((report) => report.createdBy.includes(inputSearch)))
         }
         else{ // if there is no filter type, as default, filter by name
             setFilteredReportList(reportList.filter((report) => report.firstName.toLowerCase().includes(inputSearch.toLowerCase())))
@@ -87,6 +90,7 @@ export default function ListReports(){
                 <DropdownButton id="dropdown-basic-button" title={filterType} className="dropdown-filter">
                     <Dropdown.Item onClick={() => handleChange("By Patient Name/Surname")}>By Patient Name/Surname</Dropdown.Item>
                     <Dropdown.Item onClick={() => handleChange("By TC No")}>By TC No</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleChange("By Report Creator")}>By Report Creator</Dropdown.Item>
                     <Dropdown.Item onClick={() => handleChange("Choose Filter type")}>Set No Filter</Dropdown.Item>
                 </DropdownButton>
 
