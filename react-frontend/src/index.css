@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.div-add-filter{
+  display: flex;
+  flex-direction: row;
+  height: 4rem;
+  align-items: center;
+  
+}
+.div-add-filter input{
+  width: 12rem;
+  height: 2.3rem;
+  margin-left: 10rem;
+  margin-top: 0.6rem;
+}
+
+.dropdown-filter{
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+}
