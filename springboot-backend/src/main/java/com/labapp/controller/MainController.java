@@ -4,7 +4,6 @@ import com.labapp.entity.Laborant;
 import com.labapp.entity.Report;
 import com.labapp.service.LaborantService;
 import com.labapp.service.ReportService;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
@@ -38,6 +37,7 @@ public class MainController {
 
     @GetMapping("/reports")
     public List<Report> getAllReports(){
+        
         return reportService.findAll();
     }
 
@@ -82,6 +82,11 @@ public class MainController {
     @PostMapping("/laborant")
     public Laborant createLaborant(@RequestBody Laborant laborant){
         return laborantService.save(laborant);
+    }
+
+    @GetMapping("/laborant/{hospitalIdNo}")
+    public Laborant getLaborant(@PathVariable String hospitalIdNo){
+        return laborantService.findLaborantByHospitalIdNo(hospitalIdNo);
     }
 
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
