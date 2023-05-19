@@ -56,11 +56,10 @@ export default function Registration(){
                    setMessage("Successfully registered. You can login :)")
                    setShow(true);
                 }
-                else{
-                    setMessage("Something went wrong.")
-                    setShow(true);
-                }
-            });
+            }).catch(res => {
+                   setMessage(res.response.data)
+                   setShow(true);
+            })
     }
 
     return(
