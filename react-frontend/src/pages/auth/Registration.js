@@ -53,11 +53,11 @@ export default function Registration(){
         axios.post(LAB_API_BASE_URL, laborantRegister)
             .then(res => {
                 if(res.status === 201){
-                   setMessage("Successfully registered. You can login :)")
+                   setMessage(res.data.message)
                    setShow(true);
                 }
             }).catch(res => {
-                   setMessage(res.response.data)
+                   setMessage(res.response.data.message)
                    setShow(true);
             })
     }
