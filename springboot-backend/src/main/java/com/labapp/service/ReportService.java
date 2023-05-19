@@ -8,10 +8,10 @@ public interface ReportService {
 
     List<Report> findAll();
 
-    Report findById(Integer id);
+    Report findById(Long id);
 
     Report save(Report report);
 
-    void deleteById(Integer id);
+    void deleteById(Long id);
 
 }

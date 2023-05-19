@@ -24,7 +24,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public Report findById(Integer id) {
+    public Report findById(Long id) {
 
         Optional<Report> result = reportRepository.findById(id);
         Report report = null;
@@ -46,7 +46,7 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         reportRepository.deleteById(id);
     }
 }

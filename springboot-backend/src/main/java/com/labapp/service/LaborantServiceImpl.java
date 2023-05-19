@@ -3,6 +3,8 @@ package com.labapp.service;
 import com.labapp.entity.Laborant;
 import com.labapp.repository.LaborantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class LaborantServiceImpl implements LaborantService{
     }
 
     @Override
-    public Laborant findById(Integer id) {
+    public Laborant findById(Long id) {
 
         Optional<Laborant> result = laborantRepository.findById(id);
         Laborant laborant = null;
@@ -45,7 +47,7 @@ public class LaborantServiceImpl implements LaborantService{
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         laborantRepository.deleteById(id);
     }
 
@@ -53,4 +55,6 @@ public class LaborantServiceImpl implements LaborantService{
     public Laborant findLaborantByHospitalIdNo(String hospitalIdNo) {
         return laborantRepository.findLaborantByHospitalIdNo(hospitalIdNo);
     }
+
+
 }
