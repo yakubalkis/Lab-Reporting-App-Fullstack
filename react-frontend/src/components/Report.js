@@ -5,6 +5,7 @@ import {useParams,useNavigate} from "react-router-dom";
 import {Buffer} from 'buffer';
 import Button from 'react-bootstrap/Button';
 import ReportImage from "./ReportImage";
+import getConfig from "../utils/getConfig";
 const LAB_API_BASE_URL = "http://localhost:8080/api/v1/reports";
 const LAB_API_FILE_BASE_URL = "http://localhost:8080/api/v1/file";
 
@@ -14,24 +15,30 @@ export default function(props){
     const [show, setShow] = useState(false);
     const navigate = useNavigate();
     const {laborantHospitalIdNo} = useParams();
+    const config = getConfig();
+    
 
     function editReport(id){
         navigate(`/laborant/${laborantHospitalIdNo}/${id}`);
     } 
 
     function deleteReport(id){
-        axios.delete(LAB_API_BASE_URL + "/" + id);
+        axios.delete(LAB_API_BASE_URL + "/" + id, config);
         window.location.reload();
     }
 
-    function seeImage(id, imageName){
+    function showImage(id, imageName){
 
         axios.get(LAB_API_FILE_BASE_URL +"/" + imageName, {
-            responseType: 'arraybuffer'})
+            responseType: 'arraybuffer', 
+            headers: {
+                Authorization: config.headers.Authorization
+            }
+            })
             .then((res) => {
                 setImageData(() => Buffer.from(res.data, 'binary').toString('base64'))
             })
-        setShow(true); // for modal component
+        setShow(true); // for ReportImage
     }
     
     const handleClose = () => setShow(false);
@@ -68,7 +75,7 @@ export default function(props){
                             <td>{report.date}</td>
                             <td>{report.createdBy}</td>
                             <td>
-                                <Button onClick={() => seeImage(report.id, report.imageName)} className="btn btn-dark">Click to See</Button>
+                                <Button onClick={() => showImage(report.id, report.imageName)} className="btn btn-dark">Click to See</Button>
                             </td>
                             <td>
                                 <button onClick={() => editReport(report.id)} className="btn btn-info">Update</button>

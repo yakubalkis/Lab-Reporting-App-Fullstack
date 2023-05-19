@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import getConfig from "../utils/getConfig";
 const LAB_API_BASE_URL =  "http://localhost:8080/api/v1/reports";
 const LAB_API_FILE_BASE_URL = "http://localhost:8080/api/v1/file";
 
@@ -21,14 +22,16 @@ export default function AddReport(){
     const [labelWarning, setLabelWarning] = useState("");
     const {laborantHospitalIdNo, reportId} = useParams();
     const navigate = useNavigate();
+    const config = getConfig();
 
 
     useEffect(() => {
         if(reportId !== String(0)){
-            axios.get(LAB_API_BASE_URL + "/" + reportId)
+
+            axios.get(LAB_API_BASE_URL + "/" + reportId, config)
                 .then((res) => {
 
-                    setOldImageName(res.data.imageName)
+                    setOldImageName(res.data.imageName) // to delete in backend side
 
                     setInputAll({
                         firstName: res.data.firstName,
@@ -82,24 +85,24 @@ export default function AddReport(){
             let report = {firstName: inputAll.firstName, lastName: inputAll.lastName,
                           tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName};
 
-            axios.post(LAB_API_BASE_URL+ "/" + laborantHospitalIdNo, report);
+            axios.post(LAB_API_BASE_URL+ "/" + laborantHospitalIdNo, report, config);
             
             const formData = new FormData();
             formData.append('img', imageFile);
 
-            axios.post(LAB_API_FILE_BASE_URL, formData);
+            axios.post(LAB_API_FILE_BASE_URL, formData, config);
         }
         else{ // update report
             let report = {id: reportId, firstName: inputAll.firstName, lastName: inputAll.lastName,
                           tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName};
             
-            axios.put(LAB_API_BASE_URL, report);
+            axios.put(LAB_API_BASE_URL, report, config);
             
             const formData = new FormData();
             formData.append('img', imageFile);
             formData.append('oldImageName', oldImageName); // to update, old image should be deleted
            
-            axios.put(LAB_API_FILE_BASE_URL, formData);
+            axios.put(LAB_API_FILE_BASE_URL, formData, config);
         }
         
         navigate(`/laborant/${laborantHospitalIdNo}/reports`);

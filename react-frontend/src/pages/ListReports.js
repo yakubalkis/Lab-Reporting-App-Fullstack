@@ -4,7 +4,8 @@ import {Link, useParams} from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Report from "../components/Report";
-const LAB_API_BASE_URL = "http://localhost:8080/api/v1";
+import getConfig from "../utils/getConfig";
+const LAB_API_BASE_URL = "http://localhost:8080/api/v1/reports";
 
 export default function ListReports(){
 
@@ -18,7 +19,9 @@ export default function ListReports(){
     
 
     useEffect(() => {
-        axios.get(LAB_API_BASE_URL+"/reports")
+        const config = getConfig();
+        
+        axios.get(LAB_API_BASE_URL, config)
             .then((res) => {
                 setReportList(Object.assign([], res.data)) // make deep copy to have different memory address for not being effected by change
                                                             // from filteredReportList
@@ -71,7 +74,6 @@ export default function ListReports(){
         
         setFilteredReportList((prevState) => reportList);
         setIsSorted(false);
-       
     }
     
     const HeadContent = reportList.length > 0 ? <></> : <h4 style={{marginLeft: "-10px", marginTop: "5px"}}>There are no report. You should add a report.</h4> ; 
