@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const LAB_API_BASE_URL = "http://localhost:8080/api/v1/auth/login";
 
 export default function Login(){
@@ -11,6 +11,9 @@ export default function Login(){
         hospitalIdNo: "",
         password: ""
     });
+
+    const navigate = useNavigate();
+
 
     function handleChange(event){
         const {name, value} = event.target;
@@ -33,12 +36,13 @@ export default function Login(){
         else{setLabelWarning(() => "");}
 
         let laborantRequest = {hospitalIdNo: inputAll.hospitalIdNo, password: inputAll.password}; 
-        
+
         axios.post(LAB_API_BASE_URL, laborantRequest)
             .then(res => {
-                localStorage.setItem("tokenKey", res.data.message)
+                localStorage.setItem("tokenKey", res.data.message);
+                navigate(`/laborant/${inputAll.hospitalIdNo}/reports`);
             })
-            .catch((err) => console.log(err))
+            .catch(res => setLabelWarning(() => "Invalid Id No or Password!"));
     }
 
     return(
