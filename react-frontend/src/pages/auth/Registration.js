@@ -1,11 +1,6 @@
 import { useState } from "react"
 import axios from "axios";
-import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Toast from 'react-bootstrap/Toast';
 import MessageToast from "../../components/MessageToast";
 const LAB_API_BASE_URL = "http://localhost:8080/api/v1/auth/register";
 
