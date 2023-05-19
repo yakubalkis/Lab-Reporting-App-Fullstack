@@ -1,9 +1,10 @@
 import { Routes, Route } from 'react-router';
 import './App.css';
 import Header from './components/Header';
-import ListReports from './components/ListReports';
-import Registration from './components/Registration';
-import AddReport from './components/AddReport';
+import ListReports from './pages/ListReports';
+import Registration from './pages/auth/Registration';
+import AddReport from './pages/AddReport';
+import Login from './pages/auth/Login';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Routes>
 
                 <Route path="/" element={<Registration />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="/laborant/:laborantHospitalIdNo/reports" element={<ListReports />} />
                 <Route path="/laborant/:laborantHospitalIdNo/:reportId" element={<AddReport />} />
                 
