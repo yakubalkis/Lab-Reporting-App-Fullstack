@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: aliceblue;
 }
 
 code {
@@ -26,6 +27,6 @@ code {
 }
 
 .dropdown-filter{
-  margin-left: 1.5rem;
+  margin-left: 1rem;
   margin-top: 0.5rem;
 }

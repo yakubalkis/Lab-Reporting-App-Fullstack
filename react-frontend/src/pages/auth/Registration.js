@@ -48,11 +48,16 @@ export default function Registration(){
         axios.post(LAB_API_BASE_URL, laborantRegister)
             .then(res => {
                 if(res.status === 201){
-                   setMessage(res.data.message)
+                   setMessage(res.data.message);
                    setShow(true);
+                   setInputAll({ 
+                   firstName: "",
+                   lastName: "",
+                   hospitalIdNo: "",
+                   password: ""});
                 }
             }).catch(res => {
-                   setMessage(res.response.data.message)
+                   setMessage(res.response.data.message);
                    setShow(true);
             })
     }
