@@ -2,20 +2,27 @@ import { useState } from "react"
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Toast from 'react-bootstrap/Toast';
+import MessageToast from "../../components/MessageToast";
 const LAB_API_BASE_URL = "http://localhost:8080/api/v1/auth/register";
 
 export default function Registration(){
 
-    const navigate = useNavigate();
-
+    
+    const [show, setShow] = useState(false);
+    const [message, setMessage] = useState("");
+    const [labelWarning, setLabelWarning] = useState("");
+ 
     const [inputAll, setInputAll] = useState({
         firstName: "",
         lastName: "",
         hospitalIdNo: "",
         password: ""
-    });
+    }); 
 
-    const [labelWarning, setLabelWarning] = useState("");
 
     function handleChange(event){
         const {name, value} = event.target;
@@ -41,10 +48,19 @@ export default function Registration(){
         }
         else{setLabelWarning(() => "");}
 
-        let laborant = {firstName: inputAll.firstName, lastName: inputAll.lastName, hospitalIdNo: inputAll.hospitalIdNo, password: inputAll.password}; 
-        axios.post(LAB_API_BASE_URL, laborant);
+        let laborantRegister = {firstName: inputAll.firstName, lastName: inputAll.lastName, hospitalIdNo: inputAll.hospitalIdNo, password: inputAll.password}; 
 
-        navigate(`/laborant/${inputAll.hospitalIdNo}/reports`);
+        axios.post(LAB_API_BASE_URL, laborantRegister)
+            .then(res => {
+                if(res.status === 201){
+                   setMessage("Successfully registered. You can login :)")
+                   setShow(true);
+                }
+                else{
+                    setMessage("Something went wrong.")
+                    setShow(true);
+                }
+            });
     }
 
     return(
@@ -79,7 +95,7 @@ export default function Registration(){
                             </div><br></br>
                             
                             <div className="form-group">
-                                <button type="submit" className="btn btn-success" onClick={saveLaborant}>Save</button>
+                                <button type="submit" className="btn btn-success" onClick={saveLaborant}>Register</button>
                                 <span style={{marginLeft: "1rem"}}>Already registered?
                                    <Link to="/login">
                                         <span style={{marginLeft: "3px"}}>Login</span>
@@ -92,6 +108,7 @@ export default function Registration(){
                         </form>
                     </div>
 
+                            <MessageToast show={show} message={message} setShow={setShow} />
                 </div>
             </div>
         </div>
