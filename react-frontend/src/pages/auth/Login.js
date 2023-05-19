@@ -1,6 +1,7 @@
+import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+const LAB_API_BASE_URL = "http://localhost:8080/api/v1/auth/login";
 
 export default function Login(){
 
@@ -32,7 +33,12 @@ export default function Login(){
         else{setLabelWarning(() => "");}
 
         let laborantRequest = {hospitalIdNo: inputAll.hospitalIdNo, password: inputAll.password}; 
-
+        
+        axios.post(LAB_API_BASE_URL, laborantRequest)
+            .then(res => {
+                localStorage.setItem("tokenKey", res.data.message)
+            })
+            .catch((err) => console.log(err))
     }
 
     return(
