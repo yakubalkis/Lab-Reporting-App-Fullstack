@@ -40,7 +40,9 @@ export default function Login(){
         axios.post(LAB_API_BASE_URL, laborantRequest)
             .then(res => {
                 localStorage.setItem("tokenKey", res.data.message);
+                localStorage.setItem("hostIdNoOfCurrentUser", inputAll.hospitalIdNo);
                 navigate(`/laborant/${inputAll.hospitalIdNo}/reports`);
+                window.location.reload();
             })
             .catch(res => setLabelWarning(() => "Invalid Id No or Password!"));
     }

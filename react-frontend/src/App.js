@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router';
-import './App.css';
 import Header from './components/Header';
 import ListReports from './pages/ListReports';
 import Registration from './pages/auth/Registration';
