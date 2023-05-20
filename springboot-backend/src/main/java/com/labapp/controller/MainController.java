@@ -37,12 +37,12 @@ public class MainController {
 
     @GetMapping("/reports")
     public List<Report> getAllReports(){
-        
+
         return reportService.findAll();
     }
 
     @GetMapping("/reports/{id}")
-    public Report getReport(@PathVariable Integer id){
+    public Report getReport(@PathVariable Long id){
 
         Report report = reportService.findById(id);
 
@@ -70,7 +70,7 @@ public class MainController {
     }
 
     @DeleteMapping("/reports/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteReport(@PathVariable Integer id){
+    public ResponseEntity<Map<String, Boolean>> deleteReport(@PathVariable Long id){
 
         reportService.deleteById(id);
         Map<String, Boolean> response = new HashMap<>();
@@ -78,12 +78,7 @@ public class MainController {
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
-
-    @PostMapping("/laborant")
-    public Laborant createLaborant(@RequestBody Laborant laborant){
-        return laborantService.save(laborant);
-    }
-
+    
     @GetMapping("/laborant/{hospitalIdNo}")
     public Laborant getLaborant(@PathVariable String hospitalIdNo){
         return laborantService.findLaborantByHospitalIdNo(hospitalIdNo);
