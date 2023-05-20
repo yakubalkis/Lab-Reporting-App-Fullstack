@@ -12,7 +12,7 @@ public class Laborant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -22,6 +22,9 @@ public class Laborant {
 
     @Column(name = "hospital_id_no")
     private String hospitalIdNo;
+
+    @Column(name = "password")
+    private String password;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "laborant_id")
@@ -38,17 +41,18 @@ public class Laborant {
     public Laborant() {
     }
 
-    public Laborant(String firstName, String lastName, String hospitalIdNo) {
+    public Laborant(String firstName, String lastName, String hospitalIdNo, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.hospitalIdNo = hospitalIdNo;
+        this.password = password;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -76,6 +80,14 @@ public class Laborant {
         this.hospitalIdNo = hospitalIdNo;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public List<Report> getReports() {
         return reports;
     }
@@ -91,6 +103,7 @@ public class Laborant {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", hospitalIdNo='" + hospitalIdNo + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
