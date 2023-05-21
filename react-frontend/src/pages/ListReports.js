@@ -12,7 +12,7 @@ export default function ListReports(){
     const [reportList, setReportList] = useState([]);
     const [filteredReportList, setFilteredReportList] = useState([]);
     const [filterType, setFilterType] = useState("Choose Filter type");
-    const [isSorted,setIsSorted] = useState(false)
+    const [isSortedAsc,setIsSortedAsc] = useState(false)
     const {laborantHospitalIdNo} = useParams();
 
     
@@ -56,9 +56,9 @@ export default function ListReports(){
         }
     }
     
-    function handleSortBtn(boolIsSorted){
+    function handleSortBtn(boolIsSortedAsc){
         
-        if(boolIsSorted){
+        if(boolIsSortedAsc){
             setFilteredReportList((prevState) => prevState.sort(function(a,b){
                 return new Date(a.date) - new Date(b.date)
             })) 
@@ -68,14 +68,14 @@ export default function ListReports(){
                 return new Date(b.date) - new Date(a.date)
             })) 
         }
-        setIsSorted((prevState) => !prevState);
+        setIsSortedAsc((prevState) => !prevState);
     }
 
     function handleDisableSortBtn(){
         
         setFilteredReportList((prevState) => Object.assign([], reportList)); // again make deep copy, pass by value not by reference !
-        setIsSorted(false);
-        console.log(reportList);
+        setIsSortedAsc(false);
+        
     }
     
     const HeadContent = reportList.length > 0 ? <></> : <h4 style={{marginLeft: "-10px", marginTop: "5px"}}>There are no report. You should add a report.</h4> ; 
@@ -89,18 +89,23 @@ export default function ListReports(){
 
                 <Link to={`/laborant/${laborantHospitalIdNo}/${0}`}><button style={{marginTop: "1rem", marginBottom: "0.5rem"}} className="btn btn-primary" > Add Report </button></Link>
                 
-                <input type="text" className="form-control" placeholder="Search..." onChange={handleSearchInput} />
+               
+               {reportList.length > 0 &&
+                <>
+                    <input type="text" className="form-control" placeholder="Search..." onChange={handleSearchInput} />
+                    
+                    <DropdownButton id="dropdown-basic-button" title={filterType} className="dropdown-filter">
+                        <Dropdown.Item onClick={() => handleChange("By Patient Name/Surname")}>By Patient Name/Surname</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleChange("By TC No")}>By TC No</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleChange("By Report Creator")}>By Report Creator</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleChange("Choose Filter type")}>Set No Filter</Dropdown.Item>
+                    </DropdownButton>
 
-                <DropdownButton id="dropdown-basic-button" title={filterType} className="dropdown-filter">
-                    <Dropdown.Item onClick={() => handleChange("By Patient Name/Surname")}>By Patient Name/Surname</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleChange("By TC No")}>By TC No</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleChange("By Report Creator")}>By Report Creator</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleChange("Choose Filter type")}>Set No Filter</Dropdown.Item>
-                </DropdownButton>
-
-                
-                <button style={{marginLeft:"2rem",marginTop: "0.5rem"}} onClick={() => handleSortBtn(!isSorted)}  className="btn btn-success">Sort By Date {isSorted ? <>&darr;</> : <>&uarr;</>}</button>
-                <button style={{marginLeft:"1rem",marginTop: "0.5rem"}} onClick={() => handleDisableSortBtn()}  className="btn btn-secondary">Disable Sorting<>&#x21A9;</></button>
+                    
+                    <button style={{marginLeft:"2rem",marginTop: "0.5rem"}} onClick={() => handleSortBtn(!isSortedAsc)}  className="btn btn-success">Sort By Date {isSortedAsc ? <>&darr;</> : <>&uarr;</>}</button>
+                    <button style={{marginLeft:"1rem",marginTop: "0.5rem"}} onClick={() => handleDisableSortBtn()}  className="btn btn-secondary">Disable Sorting<>&#x21A9;</></button>
+                </>
+                }
             </div>
 
             {ReportsTable}
