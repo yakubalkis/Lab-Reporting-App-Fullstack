@@ -49,7 +49,7 @@ export default function ListReports(){
             setFilteredReportList(reportList.filter((report) => report.tcNo.includes(inputSearch)))
         }
         else if(filterType==="By Report Creator"){
-            setFilteredReportList(reportList.filter((report) => report.createdBy.includes(inputSearch)))
+            setFilteredReportList(reportList.filter((report) => report.createdBy.toLowerCase().includes(inputSearch.toLowerCase())))
         }
         else{ // if there is no filter type, as default, filter by name
             setFilteredReportList(reportList.filter((report) => report.firstName.toLowerCase().includes(inputSearch.toLowerCase())))
@@ -57,6 +57,7 @@ export default function ListReports(){
     }
     
     function handleSortBtn(boolIsSorted){
+        
         if(boolIsSorted){
             setFilteredReportList((prevState) => prevState.sort(function(a,b){
                 return new Date(a.date) - new Date(b.date)
@@ -72,8 +73,9 @@ export default function ListReports(){
 
     function handleDisableSortBtn(){
         
-        setFilteredReportList((prevState) => reportList);
+        setFilteredReportList((prevState) => Object.assign([], reportList)); // again make deep copy, pass by value not by reference !
         setIsSorted(false);
+        console.log(reportList);
     }
     
     const HeadContent = reportList.length > 0 ? <></> : <h4 style={{marginLeft: "-10px", marginTop: "5px"}}>There are no report. You should add a report.</h4> ; 
