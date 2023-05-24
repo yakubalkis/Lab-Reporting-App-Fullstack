@@ -30,7 +30,7 @@ export default function AddReport(){
 
             axios.get(LAB_API_BASE_URL + "/" + reportId, config)
                 .then((res) => {
-
+                    console.log(res)
                     setOldImageName(res.data.imageName) // to delete in backend side
 
                     setInputAll({
@@ -40,7 +40,8 @@ export default function AddReport(){
                         diagnosisTitle: res.data.diagnosisTitle,
                         diagnosisDetail: res.data.diagnosisDetail,
                         date: res.data.date,
-                        imageName:res.data.imageName
+                        imageName:res.data.imageName,
+                        laborant: res.data.laborant // when uptaded, creator must not be changed, creators never change
                     })
                 })
         }
@@ -94,7 +95,7 @@ export default function AddReport(){
         }
         else{ // update report
             let report = {id: reportId, firstName: inputAll.firstName, lastName: inputAll.lastName,
-                          tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName};
+                          tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName, laborant:inputAll.laborant};
             
             axios.put(LAB_API_BASE_URL, report, config);
             
