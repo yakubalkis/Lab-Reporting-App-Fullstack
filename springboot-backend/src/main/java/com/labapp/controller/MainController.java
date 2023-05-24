@@ -72,13 +72,18 @@ public class MainController {
     @DeleteMapping("/reports/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteReport(@PathVariable Long id){
 
+        Report report = reportService.findById(id);
+
+        Laborant laborant = report.getLaborant();
+        laborant.getReports().remove(report);
+
         reportService.deleteById(id);
         Map<String, Boolean> response = new HashMap<>();
 
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
-    
+
     @GetMapping("/laborant/{hospitalIdNo}")
     public Laborant getLaborant(@PathVariable String hospitalIdNo){
         return laborantService.findLaborantByHospitalIdNo(hospitalIdNo);
