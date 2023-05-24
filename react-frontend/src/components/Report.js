@@ -3,7 +3,6 @@ import axios from "axios";
 import { useState } from "react";
 import {useParams,useNavigate} from "react-router-dom";
 import {Buffer} from 'buffer';
-import Button from 'react-bootstrap/Button';
 import ReportImage from "./ReportImage";
 import getConfig from "../utils/getConfig";
 const LAB_API_BASE_URL = "http://localhost:8080/api/v1/reports";
@@ -73,9 +72,9 @@ export default function(props){
                             <td>{report.diagnosisTitle}</td>
                             <td style={{maxWidth:"100px"}}>{report.diagnosisDetail}</td>
                             <td>{report.date}</td>
-                            <td>{report.createdBy}</td>
+                            <td>{report.laborant.firstName + " " + report.laborant.lastName}</td>
                             <td>
-                                <Button onClick={() => showImage(report.id, report.imageName)} className="btn btn-dark">Click to See</Button>
+                                <button onClick={() => showImage(report.id, report.imageName)} className="btn btn-dark">Click to See</button>
                             </td>
                             <td>
                                 <button onClick={() => editReport(report.id)} className="btn btn-info">Update</button>
