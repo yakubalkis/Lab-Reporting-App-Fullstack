@@ -1,5 +1,6 @@
 package com.labapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -26,8 +27,8 @@ public class Laborant {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "laborant_id")
+    @JsonIgnore
+    @OneToMany(mappedBy="laborant", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Report> reports;
 
     // add a convenience method
@@ -36,6 +37,7 @@ public class Laborant {
             reports = new ArrayList<>();
         }
         reports.add(report);
+        report.setLaborant(this);
     }
 
     public Laborant() {

@@ -1,5 +1,6 @@
 package com.labapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -28,8 +29,11 @@ public class Report {
     @Column(name = "image_name")
     private String imageName;
 
-    @Column(name = "created_by")
-    private String createdBy;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH},  fetch = FetchType.EAGER)
+    @JoinColumn(name = "laborant_id")
+    private Laborant laborant;
+
 
     public Report() {
     }
@@ -108,13 +112,14 @@ public class Report {
         this.imageName = imageName;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public Laborant getLaborant() {
+        return laborant;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setLaborant(Laborant laborant) {
+        this.laborant = laborant;
     }
+    
 
     @Override
     public String toString() {
