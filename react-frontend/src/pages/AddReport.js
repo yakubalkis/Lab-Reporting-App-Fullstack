@@ -5,9 +5,9 @@ import getConfig from "../utils/getConfig";
 const LAB_API_BASE_URL =  "http://localhost:8080/api/v1/reports";
 const LAB_API_FILE_BASE_URL = "http://localhost:8080/api/v1/file";
 
-export default function AddReport(){
+export default function AddReport(){ // is used both adding and updating the report!
 
-    const [inputAll, setInputAll] = useState({
+    const [inputAll, setInputAll] = useState({ // is used for all inputs
         id: "",
         firstName: "",
         lastName: "",
@@ -17,15 +17,15 @@ export default function AddReport(){
         date: "",
         imageName: ""
     });
-    const [imageFile, setImageFile] = useState({});    
-    const [labelWarning, setLabelWarning] = useState("");
-    const {laborantHospitalIdNo, reportId} = useParams();
-    const navigate = useNavigate();
+    const [imageFile, setImageFile] = useState({}); // is used to store the file 
+    const [labelWarning, setLabelWarning] = useState(""); // is used to show basic form errors
+    const {laborantHospitalIdNo, reportId} = useParams(); // IF REPORT ID is 0, process will be 'ADDING report', otherwise process will be 'UPDATING the report'
+    const navigate = useNavigate(); 
     const config = getConfig();
 
 
-    useEffect(() => {
-        if(reportId !== String(0)){
+    useEffect(() => { 
+        if(reportId !== String(0)){ // for update process, get report by id to populate the form
 
             axios.get(LAB_API_BASE_URL + "/" + reportId, config)
                 .then((res) => {
@@ -47,7 +47,7 @@ export default function AddReport(){
 
     
     
-    function handleChange(e){
+    function handleChange(e){ // is used for inputs
         const {name, value} = e.target;
 
         setInputAll(prevState => {
@@ -58,16 +58,16 @@ export default function AddReport(){
         })
     }
 
-    function onFileChangeHandler(e){
+    function onFileChangeHandler(e){ // for file input
         
         setInputAll((prevState) => {
             return{
                 ...prevState,
-                imageName: e.target.files[0].name
+                imageName: e.target.files[0].name // set file name
             }
         });
 
-        setImageFile(() => e.target.files[0]);
+        setImageFile(() => e.target.files[0]); // set file
     }
 
     function SaveOrUpdateEmployee(e){
@@ -78,38 +78,39 @@ export default function AddReport(){
             return;
         }
 
-        if(reportId=== String(0)){ // create report
+        if(reportId=== String(0)){ // CREATE report
 
             let report = {firstName: inputAll.firstName, lastName: inputAll.lastName,
                           tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, 
-                          diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName};
+                          diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName}; // report object to send to backend
 
-            axios.post(LAB_API_BASE_URL+ "/" + laborantHospitalIdNo, report, config);
+            axios.post(LAB_API_BASE_URL+ "/" + laborantHospitalIdNo, report, config); // request to create report
             
-            const formData = new FormData();
+            const formData = new FormData(); // create FormData to store the image file 
             formData.append('img', imageFile);
 
-            axios.post(LAB_API_FILE_BASE_URL, formData, config);
+            axios.post(LAB_API_FILE_BASE_URL, formData, config); // request to save image in file system
         }
-        else{ // update report
+        else{ // UPDATE report
             let report = {id: reportId, firstName: inputAll.firstName, lastName: inputAll.lastName,
                           tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, 
-                          diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName, laborant:inputAll.laborant};
+                          diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName, 
+                          laborant:inputAll.laborant}; // unlike the above post request, also need the laborant object for updating
             
-            axios.put(LAB_API_BASE_URL, report, config);
+            axios.put(LAB_API_BASE_URL, report, config); // request to update the report
             
             const formData = new FormData();
             formData.append('img', imageFile);
            
-            axios.put(LAB_API_FILE_BASE_URL, formData, config);
+            axios.put(LAB_API_FILE_BASE_URL, formData, config); // request to update the image 
         }
         
-        navigate(`/laborant/${laborantHospitalIdNo}/reports`);
+        navigate(`/laborant/${laborantHospitalIdNo}/reports`); // navigate to reports page
         window.location.reload();
     }
     
-    const header = reportId === String(0) ? "Add Report": "Update Report";
-    const fileProcess = reportId === String(0) ? "Upload File" : "Change File (If no file is selected, it will remain the same.)";
+    const header = reportId === String(0) ? "Add Report": "Update Report"; // conditional content for header
+    const fileProcess = reportId === String(0) ? "Upload File" : "Change File (If no file is selected, it will remain the same.)"; // for label of input file
 
     return(
             <div>
