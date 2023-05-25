@@ -10,6 +10,7 @@ export default function Registration(){
     const [show, setShow] = useState(false);
     const [message, setMessage] = useState("");
     const [labelWarning, setLabelWarning] = useState("");
+    const [roleType, setRoleType] = useState("");
  
     const [inputAll, setInputAll] = useState({
         firstName: "",
@@ -18,6 +19,9 @@ export default function Registration(){
         password: ""
     }); 
 
+    function handleOption(event){
+        setRoleType(event.target.value)
+    }
 
     function handleChange(event){
         const {name, value} = event.target;
@@ -41,15 +45,21 @@ export default function Registration(){
             setLabelWarning(() => "Please enter 7 digit ID number!");
             return;
         }
+        else if(roleType === ""){
+            setLabelWarning(() => "Please choose your role!");
+            return
+        }
         else{setLabelWarning(() => "");}
 
         let laborantRegister = {firstName: inputAll.firstName, lastName: inputAll.lastName, hospitalIdNo: inputAll.hospitalIdNo, password: inputAll.password}; 
-
-        axios.post(LAB_API_BASE_URL, laborantRegister)
+        
+        
+        axios.post(LAB_API_BASE_URL +"/"+ roleType, laborantRegister)
             .then(res => {
                 if(res.status === 201){
                    setMessage(res.data.message);
                    setShow(true);
+                   setRoleType("");
                    setInputAll({ 
                    firstName: "",
                    lastName: "",
@@ -63,7 +73,7 @@ export default function Registration(){
     }
 
     return(
-        <div>
+        
             <div className="row">
                 <div className="col-md-6 col-md-offset-3">
 
@@ -92,6 +102,13 @@ export default function Registration(){
                                 <label>Password: </label>
                                 <input className="form-control" placeholder="Password" type="text" name="password" value={inputAll.password}  onChange={handleChange}/>
                             </div><br></br>
+
+                            <div>
+                                <input className="form-check-input" type="radio" name="role" value="user"  onChange={handleOption} checked={roleType==="user"} />
+                                    <label style={{marginLeft:".2rem"}}>Normal User</label>
+                                <input className="form-check-input" style={{marginLeft:"1rem"}} type="radio" name="role" value="manager" onChange={handleOption} checked={roleType==="manager"}/>
+                                    <label style={{marginLeft:".2rem"}}>Manager</label>
+                            </div><br></br>
                             
                             <div className="form-group">
                                 <button type="submit" className="btn btn-success" onClick={saveLaborant}>Register</button>
@@ -102,15 +119,18 @@ export default function Registration(){
                                 </span>
                             </div>
 
-                            <label  style={{marginLeft: "1rem", color: "red"}}>{labelWarning}</label>
+                            <label  style={{color: "red"}}>{labelWarning}</label>
 
                         </form>
                     </div>
 
-                            <MessageToast show={show} message={message} setShow={setShow} />
+                    <div style={{ position: 'fixed', left: 0, bottom: 0 }}>
+                        <MessageToast show={show} message={message} setShow={setShow} />
+                    </div>
+                    
                 </div>
             </div>
-        </div>
+        
     )
 
 }
