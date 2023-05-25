@@ -1,11 +1,11 @@
 package com.labapp.security;
 
 import com.labapp.entity.Laborant;
+import com.labapp.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,19 +14,20 @@ public class JwtUserDetails implements UserDetails {
     public Long id;
     private String hospitalIdNo;
     private String password;
-    private Collection<? extends GrantedAuthority> authorities;
 
-    private JwtUserDetails(Long id, String hospitalIdNo, String password, Collection<? extends GrantedAuthority> authorities) {
+    private String role;
+
+    private JwtUserDetails(Long id, String hospitalIdNo, String password, String role) {
         this.id = id;
         this.hospitalIdNo = hospitalIdNo;
         this.password = password;
-        this.authorities = authorities;
+        this.role = role;
     }
 
     public static JwtUserDetails create(Laborant laborant){
-        List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("user"));
-        return new JwtUserDetails(laborant.getId(), laborant.getHospitalIdNo(), laborant.getPassword(), authorityList);
+        /*List<GrantedAuthority> authorityList = new ArrayList<>();
+        authorityList.add(new SimpleGrantedAuthority("user"));*/
+        return new JwtUserDetails(laborant.getId(), laborant.getHospitalIdNo(), laborant.getPassword(), laborant.getRole().getRoleName());
     }
 
     public Long getId() {
@@ -49,13 +50,17 @@ public class JwtUserDetails implements UserDetails {
         this.password = password;
     }
 
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = authorities;
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
