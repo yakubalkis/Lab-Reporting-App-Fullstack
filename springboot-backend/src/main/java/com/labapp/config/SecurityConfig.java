@@ -72,12 +72,16 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(handler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
+                .exceptionHandling().authenticationEntryPoint(handler)
+                    .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                .authorizeHttpRequests()
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/reports/**").hasAuthority("ROLE_MANAGER")
                 .requestMatchers("/api/v1/auth/**")
                 .permitAll()
                 .anyRequest().authenticated();
+
 
         httpSecurity.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
