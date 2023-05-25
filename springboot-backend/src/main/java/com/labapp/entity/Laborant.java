@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -28,10 +29,16 @@ public class Laborant {
     private String password;
 
     @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @JsonIgnore
     @OneToMany(mappedBy="laborant", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Report> reports;
 
-    // add a convenience method
+
+    // add a convenience method for bidirectional relationship between Report and Laborant
     public void addReport(Report report){
         if(reports == null){
             reports = new ArrayList<>();
@@ -43,11 +50,12 @@ public class Laborant {
     public Laborant() {
     }
 
-    public Laborant(String firstName, String lastName, String hospitalIdNo, String password) {
+    public Laborant(String firstName, String lastName, String hospitalIdNo, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.hospitalIdNo = hospitalIdNo;
         this.password = password;
+        this.role = role;
     }
 
     public Long getId() {
@@ -90,6 +98,14 @@ public class Laborant {
         this.password = password;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public List<Report> getReports() {
         return reports;
     }
@@ -97,6 +113,7 @@ public class Laborant {
     public void setReports(List<Report> reports) {
         this.reports = reports;
     }
+
 
     @Override
     public String toString() {
@@ -106,6 +123,8 @@ public class Laborant {
                 ", lastName='" + lastName + '\'' +
                 ", hospitalIdNo='" + hospitalIdNo + '\'' +
                 ", password='" + password + '\'' +
+                ", role=" + role +
+                ", reports=" + reports +
                 '}';
     }
 }
