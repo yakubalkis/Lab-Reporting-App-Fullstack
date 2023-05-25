@@ -1,6 +1,7 @@
 package com.labapp.controller;
 
 import com.labapp.entity.Laborant;
+import com.labapp.entity.Role;
 import com.labapp.requests.LaborantRequest;
 import com.labapp.response.AuthResponse;
 import com.labapp.security.JwtTokenProvider;
@@ -12,10 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -52,14 +50,24 @@ public class AuthController {
         return authResponse;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody Laborant laborant){
+    @PostMapping("/register/{roleName}")
+    public ResponseEntity<AuthResponse> register(@PathVariable String roleName, @RequestBody Laborant laborant){
         AuthResponse authResponse = new AuthResponse();
+        Role role = null;
+
 
         if(laborantService.findLaborantByHospitalIdNo(laborant.getHospitalIdNo()) != null){
             authResponse.setMessage("Hospital ID No already in use.");
             return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
         }
+
+        if(roleName.equals("manager")){
+            role = new Role("ROLE_MANAGER");
+        }
+        else if(roleName.equals("user")){
+            role = new Role("ROLE_USER");
+        }
+        laborant.setRole(role);
 
         laborant.setPassword(passwordEncoder.encode(laborant.getPassword()));
         laborantService.save(laborant);
