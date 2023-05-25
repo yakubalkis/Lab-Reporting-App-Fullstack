@@ -5,6 +5,7 @@ import {useParams,useNavigate} from "react-router-dom";
 import {Buffer} from 'buffer';
 import ReportImage from "./ReportImage";
 import getConfig from "../utils/getConfig";
+import MessageToast from "./MessageToast";
 const LAB_API_BASE_URL = "http://localhost:8080/api/v1/reports";
 const LAB_API_FILE_BASE_URL = "http://localhost:8080/api/v1/file";
 
@@ -12,6 +13,8 @@ export default function(props){
     
     const [imgData, setImageData] = useState(null);
     const [show, setShow] = useState(false);
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [message, setMessage] = useState("");
     const navigate = useNavigate();
     const {laborantHospitalIdNo} = useParams();
     const config = getConfig();
@@ -22,8 +25,15 @@ export default function(props){
     } 
 
     function deleteReport(id){
-        axios.delete(LAB_API_BASE_URL + "/" + id, config);
-        window.location.reload();
+        axios.delete(LAB_API_BASE_URL + "/" + id, config)
+            .then(() => {
+                window.location.reload();
+            })
+            .catch((err) => {
+                setMessage("You do not have permission to delete report.")
+                setShowErrorMessage(true);
+            })
+        
     }
 
     function showImage(id, imageName){
@@ -45,6 +55,7 @@ export default function(props){
     const ImageComponent = imgData !== null ?  <ReportImage show={show} onClose={handleClose}  imgData={imgData} /> : <></>
    
     return(
+       
         <div className="row">
         <table className="table table-striped table-bordered">
             
@@ -87,7 +98,13 @@ export default function(props){
         </table>
 
         {ImageComponent}
+
+        <div style={{ position: 'fixed', left: 0, bottom: 0 }}>
+            <MessageToast show={showErrorMessage} message={message} setShow={setShowErrorMessage} />
+        </div>
+
     </div>
+    
     )
 
 }
