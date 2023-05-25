@@ -17,7 +17,6 @@ export default function AddReport(){
         date: "",
         imageName: ""
     });
-    const [oldImageName,setOldImageName] = useState();
     const [imageFile, setImageFile] = useState({});    
     const [labelWarning, setLabelWarning] = useState("");
     const {laborantHospitalIdNo, reportId} = useParams();
@@ -30,9 +29,7 @@ export default function AddReport(){
 
             axios.get(LAB_API_BASE_URL + "/" + reportId, config)
                 .then((res) => {
-                    console.log(res)
-                    setOldImageName(res.data.imageName) // to delete in backend side
-
+                    
                     setInputAll({
                         firstName: res.data.firstName,
                         lastName: res.data.lastName,
@@ -84,7 +81,8 @@ export default function AddReport(){
         if(reportId=== String(0)){ // create report
 
             let report = {firstName: inputAll.firstName, lastName: inputAll.lastName,
-                          tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName};
+                          tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, 
+                          diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName};
 
             axios.post(LAB_API_BASE_URL+ "/" + laborantHospitalIdNo, report, config);
             
@@ -95,13 +93,13 @@ export default function AddReport(){
         }
         else{ // update report
             let report = {id: reportId, firstName: inputAll.firstName, lastName: inputAll.lastName,
-                          tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName, laborant:inputAll.laborant};
+                          tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, 
+                          diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName, laborant:inputAll.laborant};
             
             axios.put(LAB_API_BASE_URL, report, config);
             
             const formData = new FormData();
             formData.append('img', imageFile);
-            formData.append('oldImageName', oldImageName); // to update, old image should be deleted
            
             axios.put(LAB_API_FILE_BASE_URL, formData, config);
         }
@@ -111,7 +109,7 @@ export default function AddReport(){
     }
     
     const header = reportId === String(0) ? "Add Report": "Update Report";
-    const fileProcess = reportId === String(0) ? "Upload File" : "Change File";
+    const fileProcess = reportId === String(0) ? "Upload File" : "Change File (If no file is selected, it will remain the same.)";
 
     return(
             <div>
@@ -160,7 +158,9 @@ export default function AddReport(){
                                     </div><br></br>
                                     
                                     <button type="submit" className="btn btn-success" onClick={SaveOrUpdateEmployee}>Save</button>
+
                                     <Link to={`/laborant/${laborantHospitalIdNo}/reports`}><button className="btn btn-danger" style={{marginLeft: "10px"}}>Cancel</button></Link>
+
                                     <label style={{marginLeft: "1rem", color: "red"}}>{labelWarning}</label>
 
                                 </form>
