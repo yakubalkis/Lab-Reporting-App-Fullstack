@@ -6,6 +6,7 @@ import com.labapp.service.LaborantService;
 import com.labapp.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -70,18 +71,15 @@ public class MainController {
     }
 
     @DeleteMapping("/reports/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteReport(@PathVariable Long id){
+    public ResponseEntity<String> deleteReport(@PathVariable Long id){
 
         Report report = reportService.findById(id);
-
         Laborant laborant = report.getLaborant();
+
         laborant.getReports().remove(report);
-
         reportService.deleteById(id);
-        Map<String, Boolean> response = new HashMap<>();
 
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok("Deleted successfully");
     }
 
     @GetMapping("/laborant/{hospitalIdNo}")
@@ -102,12 +100,10 @@ public class MainController {
     }
 
     @PutMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity updateFile(@RequestParam MultipartFile img, @RequestParam String oldImageName) throws IOException {
+    public ResponseEntity updateFile(@RequestParam MultipartFile img) throws IOException {
 
-        // first, delete old image
+
         File saveFile = new ClassPathResource("static/img").getFile();
-        Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + oldImageName);
-        Files.delete(path);
 
         // save new image
         Path path2 = Paths.get(saveFile.getAbsolutePath() + File.separator + img.getOriginalFilename());
