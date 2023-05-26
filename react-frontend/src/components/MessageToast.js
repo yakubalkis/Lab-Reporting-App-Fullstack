@@ -1,11 +1,11 @@
-import Button from 'react-bootstrap/Button';
+
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Toast from 'react-bootstrap/Toast';
 
-export default function MessageToast(props){
+export default function MessageToast(props){ // is used to show message to user
 
-    const {show, setShow, message} = props;
+    const {show, setShow, message} = props; // get props
 
     return(
         <Row>

@@ -15,7 +15,7 @@ code {
 .App {
   text-align: center;
 }
-.div-add-filter{
+.div-add-filter{ /* style for ListReports page */
   display: flex;
   flex-direction: row;
   height: 4rem;

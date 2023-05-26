@@ -5,11 +5,13 @@ import Registration from './pages/auth/Registration';
 import AddReport from './pages/AddReport';
 import Login from './pages/auth/Login';
 
-function App() {
+function App() { // there are 4 main pages, AddReport is used for both adding and updating report
   return (
     <div>
       <div className="container">
+        
         <Header/>
+
         <div className="container">
             <Routes>
 

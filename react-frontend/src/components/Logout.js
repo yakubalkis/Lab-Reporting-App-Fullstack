@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router';
 export default function Profile(){
 
     const navigate = useNavigate();
-    const hostIdNoOfCurrentUser = localStorage.getItem("hostIdNoOfCurrentUser");
+    const hostIdNoOfCurrentUser = localStorage.getItem("hostIdNoOfCurrentUser"); // get host ID no from local storage
 
     function handleLogout(){
-        localStorage.removeItem("hostIdNoOfCurrentUser");
+        localStorage.removeItem("hostIdNoOfCurrentUser"); // remove items from local storage
         localStorage.removeItem("tokenKey");
 
-        navigate("/login");
+        navigate("/login"); // redirect to login page
         window.location.reload();
     }
 

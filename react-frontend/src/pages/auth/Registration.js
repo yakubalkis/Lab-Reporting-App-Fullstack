@@ -7,23 +7,23 @@ const LAB_API_BASE_URL = "http://localhost:8080/api/v1/auth/register";
 export default function Registration(){
 
     
-    const [show, setShow] = useState(false);
-    const [message, setMessage] = useState("");
-    const [labelWarning, setLabelWarning] = useState("");
-    const [roleType, setRoleType] = useState("");
+    const [show, setShow] = useState(false); // is used to show MessageToast component, will be passed to MessageToast as prop
+    const [message, setMessage] = useState(""); // is also used for message in MessageToast component
+    const [labelWarning, setLabelWarning] = useState(""); // basic warnings for user
+    const [roleType, setRoleType] = useState(""); // role type (user/manager)
  
-    const [inputAll, setInputAll] = useState({
+    const [inputAll, setInputAll] = useState({ // for input values in form
         firstName: "",
         lastName: "",
         hospitalIdNo: "",
         password: ""
     }); 
 
-    function handleOption(event){
+    function handleOption(event){ // is used for radio buttons 
         setRoleType(event.target.value)
     }
 
-    function handleChange(event){
+    function handleChange(event){ // is used to get values from inputs
         const {name, value} = event.target;
 
         setInputAll(prevState => {
@@ -34,10 +34,10 @@ export default function Registration(){
         });
     }
 
-    function saveLaborant(e){
+    function saveLaborant(e){ // to register laborant
         e.preventDefault();
         
-        if(inputAll.firstName === "" || inputAll.lastName === "" || inputAll.hospitalIdNo === "" || inputAll.password === ""){
+        if(inputAll.firstName === "" || inputAll.lastName === "" || inputAll.hospitalIdNo === "" || inputAll.password === ""){ // basic checks
             setLabelWarning(() => "Please fill in the all text boxes!");
             return;
         }
@@ -47,27 +47,28 @@ export default function Registration(){
         }
         else if(roleType === ""){
             setLabelWarning(() => "Please choose your role!");
-            return
+            return;
         }
         else{setLabelWarning(() => "");}
 
-        let laborantRegister = {firstName: inputAll.firstName, lastName: inputAll.lastName, hospitalIdNo: inputAll.hospitalIdNo, password: inputAll.password}; 
+        let laborantRegister = {firstName: inputAll.firstName, lastName: inputAll.lastName, 
+                                hospitalIdNo: inputAll.hospitalIdNo, password: inputAll.password}; // create laborant object to send to backend
         
         
-        axios.post(LAB_API_BASE_URL +"/"+ roleType, laborantRegister)
+        axios.post(LAB_API_BASE_URL +"/"+ roleType, laborantRegister) // request to save laborant
             .then(res => {
                 if(res.status === 201){
-                   setMessage(res.data.message);
+                   setMessage(res.data.message); // show message when registration is successful
                    setShow(true);
                    setRoleType("");
-                   setInputAll({ 
+                   setInputAll({ // clean up form inputs
                    firstName: "",
                    lastName: "",
                    hospitalIdNo: "",
                    password: ""});
                 }
             }).catch(res => {
-                   setMessage(res.response.data.message);
+                   setMessage(res.response.data.message); // Hospital ID NO must be UNIQUE, otherwise will give error and show error message
                    setShow(true);
             })
     }
@@ -94,7 +95,7 @@ export default function Registration(){
                             </div><br></br>
 
                             <div className="form-group">
-                                <label>Hospital Id No: </label>
+                                <label>Hospital ID No (Must be 7 digits): </label>
                                 <input className="form-control" placeholder="Id No" type="text" name="hospitalIdNo" value={inputAll.hospitalIdNo}  onChange={handleChange} maxLength={7}/>
                             </div><br></br>
 
@@ -124,10 +125,9 @@ export default function Registration(){
                         </form>
                     </div>
 
-                    <div style={{ position: 'fixed', left: 0, bottom: 0 }}>
+                </div>
+                <div style={{ position: 'fixed', left: 0, bottom: 0 }}>
                         <MessageToast show={show} message={message} setShow={setShow} />
-                    </div>
-                    
                 </div>
             </div>
         

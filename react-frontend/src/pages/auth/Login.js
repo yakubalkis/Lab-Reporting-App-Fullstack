@@ -5,17 +5,17 @@ const LAB_API_BASE_URL = "http://localhost:8080/api/v1/auth/login";
 
 export default function Login(){
 
-    const [labelWarning, setLabelWarning] = useState("");
+    const [labelWarning, setLabelWarning] = useState(""); // for basic warnings
 
-    const [inputAll, setInputAll] = useState({
+    const [inputAll, setInputAll] = useState({ // for inputs in form
         hospitalIdNo: "",
         password: ""
     });
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // to route the page
 
 
-    function handleChange(event){
+    function handleChange(event){ // get values from inputs
         const {name, value} = event.target;
 
         setInputAll(prevState => {
@@ -26,25 +26,25 @@ export default function Login(){
         });
     }
 
-    function handleLogin(e){
+    function handleLogin(e){ // handle Login btn
         e.preventDefault();
 
-        if(inputAll.hospitalIdNo === "" || inputAll.password === ""){
+        if(inputAll.hospitalIdNo === "" || inputAll.password === ""){ // basic checks
             setLabelWarning(() => "Please fill in the all text boxes!");
             return;
         }
         else{setLabelWarning(() => "");}
 
-        let laborantRequest = {hospitalIdNo: inputAll.hospitalIdNo, password: inputAll.password}; 
+        let laborantRequest = {hospitalIdNo: inputAll.hospitalIdNo, password: inputAll.password}; // create laborant request object to send backend
 
-        axios.post(LAB_API_BASE_URL, laborantRequest)
+        axios.post(LAB_API_BASE_URL, laborantRequest) // request to login
             .then(res => {
-                localStorage.setItem("tokenKey", res.data.message);
+                localStorage.setItem("tokenKey", res.data.message); // set items to local storage to use in other components
                 localStorage.setItem("hostIdNoOfCurrentUser", inputAll.hospitalIdNo);
-                navigate(`/laborant/${inputAll.hospitalIdNo}/reports`);
+                navigate(`/laborant/${inputAll.hospitalIdNo}/reports`); // route to reports page
                 window.location.reload();
             })
-            .catch(res => setLabelWarning(() => "Invalid Id No or Password!"));
+            .catch(res => setLabelWarning(() => "Invalid ID No or Password!")); // error message
     }
 
     return(
@@ -58,7 +58,7 @@ export default function Login(){
                         <form>
 
                             <div className="form-group">
-                                <label>Hospital Id No: </label>
+                                <label>Hospital ID No: </label>
                                 <input className="form-control" placeholder="Id No" type="text" name="hospitalIdNo" value={inputAll.hospitalIdNo}  onChange={handleChange} maxLength={7}/>
                             </div><br></br>
 

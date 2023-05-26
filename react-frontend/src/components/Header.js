@@ -5,12 +5,12 @@ import Logout from "./Logout"
 export default function Header(){
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const hostIdNoOfCurrentUser = localStorage.getItem("hostIdNoOfCurrentUser");
+    const hostIdNoOfCurrentUser = localStorage.getItem("hostIdNoOfCurrentUser"); // get host ID no from local storage
     
 
     useEffect(() => {
-        if(hostIdNoOfCurrentUser){
-            setIsLoggedIn(true)
+        if(hostIdNoOfCurrentUser){ // if host id does exist, we know that user logged in
+            setIsLoggedIn(true) // set true to render Logout component
         }
     }, []);
     
