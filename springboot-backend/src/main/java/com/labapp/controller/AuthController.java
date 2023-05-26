@@ -43,6 +43,7 @@ public class AuthController {
 
         Laborant laborant = laborantService.findLaborantByHospitalIdNo(loginRequest.getHospitalIdNo());
 
+        // set jtw and host id no to response
         AuthResponse authResponse = new AuthResponse();
         authResponse.setMessage("Bearer " + jwtToken);
         authResponse.setHospitalIdNo(laborant.getHospitalIdNo());
@@ -55,12 +56,13 @@ public class AuthController {
         AuthResponse authResponse = new AuthResponse();
         Role role = null;
 
-
+        // check if hospital ID No is already existed
         if(laborantService.findLaborantByHospitalIdNo(laborant.getHospitalIdNo()) != null){
             authResponse.setMessage("Hospital ID No already in use.");
             return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
         }
 
+        // set role to laborant
         if(roleName.equals("manager")){
             role = new Role("ROLE_MANAGER");
         }
@@ -69,6 +71,7 @@ public class AuthController {
         }
         laborant.setRole(role);
 
+        // encode password and save
         laborant.setPassword(passwordEncoder.encode(laborant.getPassword()));
         laborantService.save(laborant);
         authResponse.setMessage("Successfully registered. You can login.");

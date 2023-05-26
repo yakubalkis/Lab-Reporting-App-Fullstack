@@ -28,14 +28,14 @@ public class Laborant {
     @Column(name = "password")
     private String password;
 
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) // one to one bidirectional with Role
     @JoinColumn(name = "role_id")
     private Role role;
 
     @JsonIgnore
-    @OneToMany(mappedBy="laborant", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Report> reports;
+    @OneToMany(mappedBy="laborant", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // one to many bidirectional
+    private List<Report> reports;                                                       // with Report
 
 
     // add a convenience method for bidirectional relationship between Report and Laborant
@@ -47,17 +47,18 @@ public class Laborant {
         report.setLaborant(this);
     }
 
+    // constructors
     public Laborant() {
     }
 
-    public Laborant(String firstName, String lastName, String hospitalIdNo, String password, Role role) {
+    public Laborant(String firstName, String lastName, String hospitalIdNo, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.hospitalIdNo = hospitalIdNo;
         this.password = password;
-        this.role = role;
     }
 
+    // getter/setters
     public Long getId() {
         return id;
     }
@@ -114,17 +115,4 @@ public class Laborant {
         this.reports = reports;
     }
 
-
-    @Override
-    public String toString() {
-        return "Laborant{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", hospitalIdNo='" + hospitalIdNo + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                ", reports=" + reports +
-                '}';
-    }
 }

@@ -1,5 +1,6 @@
 package com.labapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,9 +15,11 @@ public class Role {
     @Column(name ="role_name")
     private String roleName;
 
-    @OneToOne(mappedBy = "role", cascade = {CascadeType.DETACH,CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
-    private Laborant laborant;
+    @JsonIgnore
+    @OneToOne(mappedBy = "role", cascade = {CascadeType.DETACH,CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    private Laborant laborant; // one to one bi with Laborant
 
+    // constructors
     public Role() {
     }
 
@@ -24,6 +27,7 @@ public class Role {
         this.roleName = roleName;
     }
 
+    // getter/setters
     public Long getId() {
         return id;
     }
@@ -47,5 +51,5 @@ public class Role {
     public void setLaborant(Laborant laborant) {
         this.laborant = laborant;
     }
-    
+
 }

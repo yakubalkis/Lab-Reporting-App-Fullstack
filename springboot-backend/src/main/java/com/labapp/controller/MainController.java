@@ -6,7 +6,6 @@ import com.labapp.service.LaborantService;
 import com.labapp.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -27,8 +24,6 @@ public class MainController {
 
     private LaborantService laborantService;
     private ReportService reportService;
-
-
 
     @Autowired
     public MainController(LaborantService laborantService, ReportService reportService) {
@@ -90,7 +85,6 @@ public class MainController {
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity uploadFile(@RequestParam MultipartFile img) throws IOException {
 
-
             File saveFile = new ClassPathResource("static/img").getFile();
             Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + img.getOriginalFilename());
 
@@ -101,7 +95,6 @@ public class MainController {
 
     @PutMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity updateFile(@RequestParam MultipartFile img) throws IOException {
-
 
         File saveFile = new ClassPathResource("static/img").getFile();
 
@@ -122,7 +115,5 @@ public class MainController {
         InputStream in = Files.newInputStream(path, StandardOpenOption.READ);
         return in.readAllBytes();
     }
-
-
 
 }

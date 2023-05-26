@@ -30,11 +30,11 @@ public class Report {
     private String imageName;
 
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH},  fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},  fetch = FetchType.EAGER) // many to one bi with Laborant
     @JoinColumn(name = "laborant_id")
     private Laborant laborant;
 
-
+    // constructors
     public Report() {
     }
 
@@ -48,6 +48,7 @@ public class Report {
         this.imageName = imageName;
     }
 
+    // getter/setters
     public Long getId() {
         return id;
     }
@@ -119,19 +120,6 @@ public class Report {
     public void setLaborant(Laborant laborant) {
         this.laborant = laborant;
     }
-    
 
-    @Override
-    public String toString() {
-        return "Report{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", tcNo='" + tcNo + '\'' +
-                ", diagnosisTitle='" + diagnosisTitle + '\'' +
-                ", diagnosisDetail='" + diagnosisDetail + '\'' +
-                ", date='" + date + '\'' +
-                ", imageName='" + imageName + '\'' +
-                '}';
-    }
+
 }
