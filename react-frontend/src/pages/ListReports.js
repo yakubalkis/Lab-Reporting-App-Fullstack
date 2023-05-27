@@ -40,22 +40,21 @@ export default function ListReports(){
         const inputSearch = e.target.value; // get text from search textbox to search in report list
        
         if(filterType==="By Patient Name/Surname"){ // filter by name/surname of patient
-
-            setFilteredReportList(reportList.filter((report) => report.firstName.toLowerCase().includes(inputSearch.toLowerCase())))
-                if(filteredReportList.length===0){ // if not found by name, try by lastname
-                    setFilteredReportList(reportList.filter((report) => report.lastName.toLowerCase().includes(inputSearch.toLowerCase())))
-                }
+            setFilteredReportList(reportList.filter((report) => 
+                        (report.firstName.toLowerCase() + report.lastName.toLowerCase()).includes(inputSearch.toLowerCase().trim().replace(/\s/g,'')) ))
         }
         else if(filterType==="By TC No"){ // filter by TC No 
             setFilteredReportList(reportList.filter((report) => report.tcNo.includes(inputSearch)))
         }
         else if(filterType==="By Report Creator"){ // filter by creator of report
-            setFilteredReportList(reportList.filter((report) => report.createdBy.toLowerCase().includes(inputSearch.toLowerCase())))
+            setFilteredReportList(reportList.filter((report) => 
+                        (report.laborant.firstName.toLowerCase() + report.laborant.lastName.toLowerCase()).includes(inputSearch.toLowerCase().trim().replace(/\s/g,'')) ))
         }
-        else{ // if there is no filter type, as default, filter by name of patient
+        else{ // if there is no filter type, filter by name of patient as default,
             setFilteredReportList(reportList.filter((report) => report.firstName.toLowerCase().includes(inputSearch.toLowerCase())))
         }
     }
+
     
     function handleSortBtn(boolIsSortedAsc){ // is used to sort by date
         
