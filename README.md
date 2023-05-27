@@ -14,3 +14,10 @@ This project is a laboratory reporting application.
   ID number already used by someone else.<br>
 • In order to log in to the application, user must enter the password and hospital ID number.<br>
 
+## Required Installations
+### Backend
+• Java 17 and maven
+• MySQL server (v8.0.32)
+• NodeJS (v18.13.0)
+  
+
