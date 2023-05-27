@@ -50,9 +50,6 @@ export default function ListReports(){
             setFilteredReportList(reportList.filter((report) => 
                         (report.laborant.firstName.toLowerCase() + report.laborant.lastName.toLowerCase()).includes(inputSearch.toLowerCase().trim().replace(/\s/g,'')) ))
         }
-        else{ // if there is no filter type, filter by name of patient as default,
-            setFilteredReportList(reportList.filter((report) => report.firstName.toLowerCase().includes(inputSearch.toLowerCase())))
-        }
     }
 
     
@@ -94,7 +91,7 @@ export default function ListReports(){
                
                {reportList.length > 0 &&
                 <>
-                    <input type="text" className="form-control" placeholder="Search..." onChange={handleSearchInput} />
+                    <input type="text" className="form-control" placeholder="Search after filtering..." onChange={handleSearchInput} />
                     
                     <DropdownButton id="dropdown-basic-button" title={filterType} className="dropdown-filter">
                         <Dropdown.Item onClick={() => handleChange("By Patient Name/Surname")}>By Patient Name/Surname</Dropdown.Item>
