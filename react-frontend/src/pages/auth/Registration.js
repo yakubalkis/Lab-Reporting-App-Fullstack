@@ -105,6 +105,7 @@ export default function Registration(){
                             </div><br></br>
 
                             <div>
+                                <label>Choose your role:</label><br></br>
                                 <input className="form-check-input" type="radio" name="role" value="user"  onChange={handleOption} checked={roleType==="user"} />
                                     <label style={{marginLeft:".2rem"}}>Normal User</label>
                                 <input className="form-check-input" style={{marginLeft:"1rem"}} type="radio" name="role" value="manager" onChange={handleOption} checked={roleType==="manager"}/>
