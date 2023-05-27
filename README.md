@@ -16,8 +16,8 @@ This project is a laboratory reporting application.
 
 ## Required Installations
 ### Backend
-• Java 17 and maven
-• MySQL server (v8.0.32)
-• NodeJS (v18.13.0)
+• Java 17 and maven<br>
+• MySQL server (v8.0.32)<br>
+• NodeJS (v18.13.0)<br>
   
 
