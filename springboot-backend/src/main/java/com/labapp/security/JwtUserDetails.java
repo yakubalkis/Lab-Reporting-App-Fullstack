@@ -24,9 +24,8 @@ public class JwtUserDetails implements UserDetails {
         this.role = role;
     }
 
-    public static JwtUserDetails create(Laborant laborant){
-        /*List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("user"));*/
+    public static JwtUserDetails create(Laborant laborant){ // static method that gets Laborant object and returns UserDetails object
+
         return new JwtUserDetails(laborant.getId(), laborant.getHospitalIdNo(), laborant.getPassword(), laborant.getRole().getRoleName());
     }
 
