@@ -23,9 +23,12 @@ This project is a laboratory reporting application.
 #### Backend
 1. Before running, you need to create "static/img" directory in target/classes directory because image files are stored in there.<br>
 <img width="511" alt="file" src="https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/5144c48b-0e91-415c-bc89-c790e600137a"><br>
-2. Create new user with "springstudent" username and password on mysql server and create database named "report-system" OR
+
+2. Create new user with "springstudent" username and password on mysql server and create database named "report_system" OR
 update the required fields in application.properties file to continue with your own username/password and database in mysql server.<br>
-![Ekran Resmi 2023-05-28 00 37 06](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/9f7d423c-23ca-4a8c-a5d4-77580b31adeb)<br>
+![Ekran Resmi 2023-05-28 23 02 42](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/2ba9fd90-fb21-4b5a-98ff-f41950ffa96e)
+<br>
+
 3. Run Spring Boot application with maven on terminal: <br>
  ```> cd [path of springboot-backend folder]``` (Open spring-boot project in terminal) <br>
  ```> mvn install``` (After that, you will see the path of jar file in terminal output. Copy this with the project folder out of the path.) <br>
@@ -37,6 +40,7 @@ update the required fields in application.properties file to continue with your 
   ```> npm install```<br>
   ```> npm start``` <br>
   • Finally, open http://localhost:3000 in your browser.
+  <hr>
 
 ## Business Logic
 ### - Backend
@@ -92,6 +96,7 @@ I used Spring Security with JWT for authentication and authorization processes.<
 I wrote security configuration in SecurityConfig class.<br>
 > I added a CorsFilter method to filter requests that come from cross origin to give permission.<br>
 > I also added a SecurityFilterChain method to handle authenticate/authorize requests using all these security configurations.<br>
+
 ![Ekran Resmi 2023-05-28 14 59 42](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/a9d20b66-85b4-41e0-9601-ffed4973e780) <br>
 <hr>
 
@@ -101,7 +106,7 @@ I wrote security configuration in SecurityConfig class.<br>
 > 'axios' for sending requests to the API <br>
 > 'bootstrap' and 'react-bootstrap' for style <br>
 > 'react-router' / 'react-router-dom' for routing pages <br>
-> 'buffer' to manipulate typed arrays(arraybuffer) for image files(because files are taken as array of bytes from backend) <br>
+> 'buffer' to manipulate typed arrays for image files (because files are taken as array of bytes from backend) <br>
 
 #### Pages:
 There are 4 pages for app. (AddReport, ListReports, Registration, Login)<br>
@@ -128,10 +133,57 @@ If the hospital Id number entered by the user is used by someone else, I get an 
 
 ![success](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/859d92d9-8c70-4a86-ac25-6b3d0a7a6cdc)
 
+#### Components:<br>
+There are 5 components.(Header, Logout, MessageToast, Report, ReportImage)<br>
+
+##### Header and Logout:<br>
+> I display the Logout component in the Header component. Logout component is existed for logout process.<br>
+
+<img width="1297" alt="Ekran Resmi 2023-05-28 22 32 15" src="https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/e1526041-6e0c-4c1d-a844-d88995d78d51"><br>
+
+##### MessageToast: <br>
+> I use this custom component to display messages to user. I mentioned this above.<br>
+
+##### Report: <br>
+> It is responsiple for displaying table. It takes report list data as prop and uses it to display. Showing report image and deleting report processes run in this component. Users who have normal user role can't delete report and when they try to delete, they get message. Since I send request to delete, when user get unauthorized error, I catch this error and show message them. Only users who have manager role can delete report.<br>
+
+![FCAEC43C-0A2A-4577-8DFB-877F82562F0D_1_201_a](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/a4649352-8933-42e9-a5c1-1438f8c53078)
+<br>
+
+##### Report Image: <br>
+> It is used to display image with Modal component that is imported from "react-bootstrap" package. It takes image data as prop from Report component and displays it. When user clicks to "Click to See" component for a report, image data are taken from backend by requesting to API in Report component, then, this data is being parsed and is sent to Report Image component as prop.<br>
+
+![4C029A17-C814-4CAF-B7C5-574A704CC7D4_1_105_c](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/3e529b76-5cf9-42f5-8b4f-b8b02a3b401f) <br>
+<hr></hr>
+
+#### Utils: <br>
+> getConfig.js:<br>
+I created a custom function to get jwt token from local storage. This function is used in components to put config in requests for security.<br>
+
+![Ekran Resmi 2023-05-28 23 17 40](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/67271b29-c121-45c9-bd95-cec851bc8497)<br>
+
+#### Implementations for Searching by filter and Sorting: <br>
+
+##### Searching by Filter:<br>
+> The user must first select the filter type, then can search.<br>
+When user choose the filter type, I save chosen type to state. After that, when user entered keywords, I search for keyword by this filter type.(Block of code from ListReports.js)<br>
+
+![Ekran Resmi 2023-05-28 23 32 55](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/94b551b7-48ca-40a4-a7ea-3a41fb81aac4) <br>
+
+##### Sorting by Date: <br>
+> When the user clicks the "Sort by Date" button for the first time, reports are sorted from past to forward. Then, if user again clicks, reports are sorted from forward to past. If user clicks the "Disable Sorting" button, reports are sorted by database again. 
+(Block of code from ListReports.js) <br>
+
+![Ekran Resmi 2023-05-28 23 40 14](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/60db319d-01b9-40cc-9b21-a0ac191d7d93)
 
 
-> Implementation of Role based Authorization in ListReports:<br>
-When users who don't have role(managers can delete) try to delete report, I get error from delete request and by catching this error, I get 
+
+
+
+
+
+
+ 
 
 
 
