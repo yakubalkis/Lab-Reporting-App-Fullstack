@@ -13,6 +13,7 @@ This project is a laboratory reporting application.
 • In order to have a user account, user must register. It is not possible to register with the hospital 
   ID number already used by someone else.<br>
 • In order to log in to the application, user must enter the password and hospital ID number.<br>
+• Users who have manager role can delete reports but users who don't have manager role can't delete reports.(RBAC)<br>
 
 ## Required Installations
 • Java 17 and maven <br>
