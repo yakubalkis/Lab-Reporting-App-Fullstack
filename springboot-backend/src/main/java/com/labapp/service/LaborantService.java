@@ -1,13 +1,14 @@
 package com.labapp.service;
 
+import com.labapp.dto.LaborantDTO;
 import com.labapp.entity.Laborant;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 
 import java.util.List;
 
 public interface LaborantService{
 
-    List<Laborant> findAll();
+    List<LaborantDTO> findAll();
 
     Laborant findById(Long id);
 

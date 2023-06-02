@@ -1,26 +1,38 @@
 package com.labapp.service;
 
+import com.labapp.dto.LaborantDTO;
+import com.labapp.dto.ReportDTO;
+import com.labapp.entity.Laborant;
 import com.labapp.entity.Report;
 import com.labapp.repository.ReportRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportServiceImpl implements ReportService{
 
     private ReportRepository reportRepository;
 
+    private ModelMapper modelMapper;
+
     @Autowired
-    public ReportServiceImpl(ReportRepository reportRepository) {
+    public ReportServiceImpl(ReportRepository reportRepository, ModelMapper modelMapper)
+    {
         this.reportRepository = reportRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public List<Report> findAll() {
-        return reportRepository.findAll();
+    public List<ReportDTO> findAll() {
+        return reportRepository.findAll()
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -41,12 +53,17 @@ public class ReportServiceImpl implements ReportService{
 
     @Override
     public Report save(Report report) {
-
         return reportRepository.save(report);
     }
 
     @Override
     public void deleteById(Long id) {
         reportRepository.deleteById(id);
+    }
+
+    private ReportDTO convertEntityToDto(Report report){
+        ReportDTO reportDTO = new ReportDTO();
+        reportDTO = modelMapper.map(report, ReportDTO.class);
+        return reportDTO;
     }
 }

@@ -1,7 +1,9 @@
 package com.labapp.service;
 
+import com.labapp.dto.LaborantDTO;
 import com.labapp.entity.Laborant;
 import com.labapp.repository.LaborantRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,20 +11,26 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LaborantServiceImpl implements LaborantService{
 
     private LaborantRepository laborantRepository;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public LaborantServiceImpl(LaborantRepository laborantRepository) {
+    public LaborantServiceImpl(LaborantRepository laborantRepository, ModelMapper modelMapper) {
         this.laborantRepository = laborantRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public List<Laborant> findAll() {
-        return laborantRepository.findAll();
+    public List<LaborantDTO> findAll() {
+        return laborantRepository.findAll()
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -56,5 +64,10 @@ public class LaborantServiceImpl implements LaborantService{
         return laborantRepository.findLaborantByHospitalIdNo(hospitalIdNo);
     }
 
+    private LaborantDTO convertEntityToDto(Laborant laborant){
+        LaborantDTO laborantDTO = new LaborantDTO();
+        laborantDTO = modelMapper.map(laborant, LaborantDTO.class);
+        return laborantDTO;
+    }
 
 }

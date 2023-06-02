@@ -1,12 +1,13 @@
 package com.labapp.service;
 
+import com.labapp.dto.ReportDTO;
 import com.labapp.entity.Report;
 
 import java.util.List;
 
 public interface ReportService {
 
-    List<Report> findAll();
+    List<ReportDTO> findAll();
 
     Report findById(Long id);
 
