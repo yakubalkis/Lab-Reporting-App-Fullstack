@@ -94,8 +94,7 @@ export default function AddReport(){ // is used both adding and updating the rep
         else{ // UPDATE report
             let report = {id: reportId, firstName: inputAll.firstName, lastName: inputAll.lastName,
                           tcNo: inputAll.tcNo, diagnosisTitle: inputAll.diagnosisTitle, 
-                          diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName, 
-                          laborant:inputAll.laborant}; // unlike the above post request, also need the laborant object for updating
+                          diagnosisDetail: inputAll.diagnosisDetail, date: inputAll.date, imageName: inputAll.imageName}; // unlike the above post request, also need the id for updating
             
             axios.put(LAB_API_BASE_URL, report, config); // request to update the report
             
