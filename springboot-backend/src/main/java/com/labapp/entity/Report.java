@@ -30,8 +30,8 @@ public class Report {
     private String imageName;
 
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},  fetch = FetchType.EAGER) // many to one bi with Laborant
-    @JoinColumn(name = "laborant_id")
+    @ManyToOne(cascade = {CascadeType.DETACH,  CascadeType.REFRESH},  fetch = FetchType.EAGER) // many to one bi with Laborant
+    @JoinColumn(name = "laborant_id", updatable = false)
     private Laborant laborant;
 
     // constructors
@@ -121,5 +121,17 @@ public class Report {
         this.laborant = laborant;
     }
 
-
+    @Override
+    public String toString() {
+        return "Report{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", tcNo='" + tcNo + '\'' +
+                ", diagnosisTitle='" + diagnosisTitle + '\'' +
+                ", diagnosisDetail='" + diagnosisDetail + '\'' +
+                ", date='" + date + '\'' +
+                ", imageName='" + imageName + '\'' +
+                '}';
+    }
 }
