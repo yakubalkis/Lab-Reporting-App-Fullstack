@@ -1,9 +1,11 @@
 package com.labapp.controller;
 
+import com.labapp.dto.ReportDTO;
 import com.labapp.entity.Laborant;
 import com.labapp.entity.Report;
 import com.labapp.service.LaborantService;
 import com.labapp.service.ReportService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
@@ -24,52 +26,57 @@ public class MainController {
 
     private LaborantService laborantService;
     private ReportService reportService;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public MainController(LaborantService laborantService, ReportService reportService) {
+    public MainController(LaborantService laborantService, ReportService reportService, ModelMapper modelMapper) {
         this.laborantService = laborantService;
         this.reportService = reportService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/reports")
-    public List<Report> getAllReports(){
+    public List<ReportDTO> getAllReports(){
 
         return reportService.findAll();
     }
 
     @GetMapping("/reports/{id}")
-    public Report getReport(@PathVariable Long id){
+    public ReportDTO getReport(@PathVariable Long id){
 
-        Report report = reportService.findById(id);
+        ReportDTO reportDTO = modelMapper.map(reportService.findById(id), ReportDTO.class);
 
-        if(report == null){
+        if(reportDTO == null){
             throw new RuntimeException("Report not found with id: "+ id);
         }
-        return report;
+        return reportDTO;
     }
 
 
     @PostMapping("/reports/{laborantHospitalIdNo}")
-    public Report createReport(@PathVariable String laborantHospitalIdNo, @RequestBody Report report){
+    public ReportDTO createReport(@PathVariable String laborantHospitalIdNo, @RequestBody Report report){
 
         Laborant currentLaborant = laborantService.findLaborantByHospitalIdNo(laborantHospitalIdNo);
 
         currentLaborant.addReport(report);
-
-        return reportService.save(report);
+        reportService.save(report);
+        ReportDTO reportDTO = modelMapper.map(report, ReportDTO.class);
+        return  reportDTO;
     }
 
     @PutMapping("/reports")
-    public Report updateReport(@RequestBody Report updatedReport)
+    public ReportDTO updateReport(@RequestBody Report updatedReport)
     {
-        return reportService.save(updatedReport);
+        reportService.save(updatedReport);
+        ReportDTO reportDTO = modelMapper.map(updatedReport, ReportDTO.class);
+        return  reportDTO;
     }
 
     @DeleteMapping("/reports/{id}")
     public ResponseEntity<String> deleteReport(@PathVariable Long id){
 
         Report report = reportService.findById(id);
-        Laborant laborant = report.getLaborant();
+        Laborant laborant =  report.getLaborant();
 
         laborant.getReports().remove(report);
         reportService.deleteById(id);
@@ -77,18 +84,14 @@ public class MainController {
         return ResponseEntity.ok("Deleted successfully");
     }
 
-    @GetMapping("/laborant/{hospitalIdNo}")
-    public Laborant getLaborant(@PathVariable String hospitalIdNo){
-        return laborantService.findLaborantByHospitalIdNo(hospitalIdNo);
-    }
 
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity uploadFile(@RequestParam MultipartFile img) throws IOException {
 
-            File saveFile = new ClassPathResource("static/img").getFile();
-            Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + img.getOriginalFilename());
+        File saveFile = new ClassPathResource("static/img").getFile();
+        Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + img.getOriginalFilename());
 
-            Files.copy(img.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(img.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
         return ResponseEntity.ok().build();
     }
