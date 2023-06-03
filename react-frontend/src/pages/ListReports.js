@@ -14,7 +14,7 @@ export default function ListReports(){
     const [reportList, setReportList] = useState([]); // list of reports
     const [filteredReportList, setFilteredReportList] = useState([]); // list of filtered reports for filtering process
     const [filterType, setFilterType] = useState("Choose Filter type"); // filter type
-    const [query, setQuery] = useState("");
+    const [query, setQuery] = useState(""); // value for search input
     const [isSortedAsc,setIsSortedAsc] = useState(false) // is used in function handleSortBtn, because there are 2 ways of sorting by date
     const {laborantHospitalIdNo} = useParams(); // getting from url path, used for navigating process in Link of Add Report button
 
@@ -39,7 +39,7 @@ export default function ListReports(){
         const config = getConfig(); // get config(jwt) to use in http request
 
         if(query !== "" && filterType !== "Choose Filter type"){
-            const fNo = getFilterNo(filterType);
+            const fNo = getFilterNo();
             
             axios.get(LAB_API_SEARCH_URL + fNo + query, config)
                 .then((res) => {
@@ -62,7 +62,7 @@ export default function ListReports(){
         debounce(changeHandler, 300)
     , []);
 
-    function getFilterNo(type){ // return parameter by filter type for get searching request
+    function getFilterNo(){ // return parameter by filter type for searching request
         if(filterType === "By Patient Name/Surname"){
             return "/f1/";
         }
