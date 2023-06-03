@@ -53,6 +53,16 @@ Laborant and Report tables. There is also 'One to One' bidirectional relationshi
 #### • _CRUD Operations and JPA_<br>
 > I wrote two layers named repository and service for Laborant and Role classes. Repository interfaces extend JpaRepository for CRUD operations. Service interfaces and implementation classes are existed to implement methods which are inherited. <br>
 
+#### • _Custom Query Methods for Searching_<br>
+> • I wrote three custom query methods for searching process.<br>
+> • In order to get reports by patient's name or surname, I wrote 'getByPatientNameOrSurname' function. I also wrote 'getByTcNo' function to search by patient's TC number. (ReportRepository.java)<br>
+> • In order to get reports by laboratory worker's name or surname, I wrote 'getLaborantByNameOrSurname' function. It returns list of laboratory workers by filter. After taking list of laboratory workers, I return laboratory workers' reports.(LaborantRepository.java)<br>
+> • The process of returning reports of workers is handled in SearchController class.<br>
+Query methods:<br>
+
+![Ekran Resmi 2023-06-03 16 48 09](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/f8cd76d7-388c-4177-8fbf-1d6c215093d5)<br>
+
+
 #### • _DTO Layer_<br>
 > At first, I wrote a configuration class for Model Mapper library to be able to do conversion processes between Entities and DTOs.(ModelMapperConfig.java)<br>
 > Then, I created two DTO classes which are LaborantDTO and ReportDTO to send only necessary data to the client side. I send data to client side through DTO classes.<br>
@@ -128,6 +138,7 @@ I wrote security configuration in SecurityConfig class.<br>
 > 'bootstrap' and 'react-bootstrap' for style <br>
 > 'react-router' / 'react-router-dom' for routing pages <br>
 > 'buffer' to manipulate typed arrays for image files (because files are taken as array of bytes from backend) <br>
+> 'lodash.debounce' to use debounced function for handling process of searching <br> 
 
 #### Pages:
 There are 4 pages for app. (AddReport, ListReports, Registration, Login)<br>
@@ -185,11 +196,16 @@ I created a custom function to get jwt token from local storage. This function i
 
 #### Implementations for Searching by filter and Sorting: <br>
 
-##### Searching by Filter:<br>
+##### Searching by Filter(Debouncing a callback - Searching in DB):<br>
 > The user must first select the filter type, then can search.<br>
-When user choose the filter type, I save chosen type to state. After that, when user entered keywords, I search for keyword by this filter type.(Block of code from ListReports.js)<br>
+When user choose the filter type, I save chosen type to state. After that, when user entered keywords, I set keyword to state(query) 300ms intervals by debouncing the function. <br>
+I soften the filtering by applying 300ms time debouncing on the changeHandler callback function.<br>
+Instead of sending that request on every keypress, we can wait a little bit until the user stops typing, and then send the entire value in one go. This is what debouncing does.<br>
+(Block of code from ListReports.js)<br>
 
-![Ekran Resmi 2023-05-28 23 32 55](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/94b551b7-48ca-40a4-a7ea-3a41fb81aac4) <br>
+![image](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/f073cbe7-4bff-41f2-a15f-ca28dc641818)
+ <br>
+ <br>
 
 ##### Sorting by Date: <br>
 > When the user clicks the "Sort by Date" button for the first time, reports are sorted from past to forward. Then, if user again clicks, reports are sorted from forward to past. If user clicks the "Disable Sorting" button, reports are sorted by database again. 
