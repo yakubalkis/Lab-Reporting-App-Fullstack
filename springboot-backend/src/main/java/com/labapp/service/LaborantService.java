@@ -18,5 +18,6 @@ public interface LaborantService{
 
     Laborant findLaborantByHospitalIdNo(String hospitalIdNo);
 
+    List<Laborant> getLaborantListByName(String firstName, String lastName);
 
 }

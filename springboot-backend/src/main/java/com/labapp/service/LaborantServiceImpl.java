@@ -64,6 +64,11 @@ public class LaborantServiceImpl implements LaborantService{
         return laborantRepository.findLaborantByHospitalIdNo(hospitalIdNo);
     }
 
+    @Override
+    public List<Laborant> getLaborantListByName(String firstName, String lastName) {
+        return laborantRepository.getLaborantByName(firstName, lastName);
+    }
+
     private LaborantDTO convertEntityToDto(Laborant laborant){
         LaborantDTO laborantDTO = new LaborantDTO();
         laborantDTO = modelMapper.map(laborant, LaborantDTO.class);
