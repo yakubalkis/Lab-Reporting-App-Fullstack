@@ -53,11 +53,20 @@ Laborant and Report tables. There is also 'One to One' bidirectional relationshi
 #### • _CRUD Operations and JPA_<br>
 > I wrote two layers named repository and service for Laborant and Role classes. Repository interfaces extend JpaRepository for CRUD operations. Service interfaces and implementation classes are existed to implement methods which are inherited. <br>
 
+#### • _DTO Layer_<br>
+> At first, I wrote a configuration class for Model Mapper library to be able to do conversion processes between Entities and DTOs.(ModelMapperConfig.java)<br>
+> Then, I created two DTO classes which are LaborantDTO and ReportDTO to send only necessary data to the client side. I send data to client side through DTO classes.<br>
+###### Example usage(block of code from ReportServiceImpl.java):<br>
+ 
+![Ekran Resmi 2023-06-03 14 10 35](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/d1b74a10-54ae-415a-b9fa-cdb38043ae7a)
+
+
 #### • _About My RESTful API_<br>
-##### Base Requests:
+##### Base Requests(MainController.java):
 
 > ```GET "http://localhost:8080/api/v1/reports"```: Get all reports. Example response: <br><br>
-<img width="351" alt="Ekran Resmi 2023-05-28 02 39 12" src="https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/9848f6a7-2708-4e47-8ca4-a15fd9519799"><br>
+![Görüntü 2 06 2023 20 24](https://github.com/yakubalkis/Lab-Reporting-App-Fullstack/assets/97192201/a6b44f47-d1c2-4c31-909e-de56bcf048e4)
+<br>
 
 > ```GET "http://localhost:8080/api/v1/reports/{id}"```: Get report by Id.<br>
 
@@ -75,13 +84,24 @@ Laborant and Report tables. There is also 'One to One' bidirectional relationshi
 
 > ```GET "http://localhost:8080/api/v1/file/{imgName}"```: Get the image file from file system.<br>
 
-##### Auth Requests:
+##### Auth Requests(AuthController.java):
 
 > ```POST "http://localhost:8080/api/v1/auth/login"```: 
 Request for login, it takes a LaborantRequest object that contains user's password and hospital ID number. It responses with AuthResponse object that contains message(Json web token) and hospital ID number. I created LaborantRequest and AuthResponse classes for these processes. <br> 
 
 > ```POST "http://localhost:8080/api/v1/auth/register/{roleName}"```: 
-Request for registration, it takes a Laborant object. I also take a variable named roleName to be able to set a role for laboratory worker. It responses with AuthResponse object to send message to the client. If hospital ID number is already used by someone else, it sends error message. If registration is successfull, it sends a success message too.
+Request for registration, it takes a Laborant object. I also take a variable named roleName to be able to set a role for laboratory worker. It responses with AuthResponse object to send message to the client. If hospital ID number is already used by someone else, it sends error message. If registration is successfull, it sends a success message too.<br>
+
+##### Search Requests(SearchController.java):
+
+> ```Get "http://localhost:8080/api/v1/search/reports/f1/{patientFullName}"```: 
+Get reports by patient's firstname or lastname.<br>
+
+> ```Get "http://localhost:8080/api/v1/search/reports/f2/{tcNo}"```: 
+Get reports by patient's TC Number.<br>
+
+> ```Get "http://localhost:8080/api/v1/search/reports/f3/{laborantFullName}"```: 
+Get reports by laboratory worker's firstname or lastname.<br>
 
 #### • _SECURITY_<br>
 I used Spring Security with JWT for authentication and authorization processes.<br>
