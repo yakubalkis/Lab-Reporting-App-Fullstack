@@ -61,6 +61,22 @@ public class ReportServiceImpl implements ReportService{
         reportRepository.deleteById(id);
     }
 
+    @Override
+    public List<ReportDTO> getListByPatientNameORSurname(String firstName, String lastName) {
+        return reportRepository.getByPatientNameORSurname(firstName, lastName)
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReportDTO> getListByTcNo(String tcNo) {
+        return reportRepository.getByTcNo(tcNo)
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
     private ReportDTO convertEntityToDto(Report report){
         ReportDTO reportDTO = new ReportDTO();
         reportDTO = modelMapper.map(report, ReportDTO.class);

@@ -15,4 +15,8 @@ public interface ReportService {
 
     void deleteById(Long id);
 
+    List<ReportDTO> getListByPatientNameORSurname(String firstName, String lastName);
+
+    List<ReportDTO> getListByTcNo(String tcNo);
+
 }
