@@ -84,7 +84,6 @@ public class MainController {
         return ResponseEntity.ok("Deleted successfully");
     }
 
-
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity uploadFile(@RequestParam MultipartFile img) throws IOException {
 
@@ -95,6 +94,7 @@ public class MainController {
 
         return ResponseEntity.ok().build();
     }
+
 
     @PutMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity updateFile(@RequestParam MultipartFile img) throws IOException {
