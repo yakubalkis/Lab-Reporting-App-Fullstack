@@ -65,7 +65,7 @@ public class LaborantServiceImpl implements LaborantService{
     }
 
     @Override
-    public List<Laborant> getLaborantListByName(String firstName, String lastName) {
+    public List<Laborant> getLaborantListByNameOrSurname(String firstName, String lastName) {
         return laborantRepository.getLaborantByNameORSurname(firstName, lastName);
     }
 

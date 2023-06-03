@@ -56,10 +56,10 @@ public class SearchController {
         List<ReportDTO> allReports = new ArrayList<>();
 
         if(fullName.length == 2){ // there is both name and surname
-            laborants =  laborantService.getLaborantListByName(fullName[0], fullName[1]);
+            laborants =  laborantService.getLaborantListByNameOrSurname(fullName[0], fullName[1]);
         }
         else{
-            laborants = laborantService.getLaborantListByName(fullName[0], fullName[0]); // if there's no second word, user may have entered the name or surname.
+            laborants = laborantService.getLaborantListByNameOrSurname(fullName[0], fullName[0]); // if there's no second word, user may have entered the name or surname.
         }
 
         for (Laborant laborant : laborants) { // convert reports to reportDtos
