@@ -12,6 +12,6 @@ public interface LaborantRepository extends JpaRepository<Laborant, Long> {
     Laborant findLaborantByHospitalIdNo(String hospitalIdNo);
 
     @Query("SELECT l FROM Laborant l WHERE l.firstName LIKE ?1% OR l.lastName LIKE ?2%")
-    List<Laborant> getLaborantByName(String firstName, String lastName);
+    List<Laborant> getLaborantByNameORSurname(String firstName, String lastName);
 
 }
